@@ -3,6 +3,7 @@
  */
 
 //creates a Player object
+//player also needs another frame for second image
 function Player (game, frame) {
     //new Sprite(game, x, y, key, frame)
     //random x y location and uses Player image
@@ -23,6 +24,9 @@ function Player (game, frame) {
 
     this.cursors = game.input.keyboard.createCursorKeys();
     this.changeKey = game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+
+    this.useKey = game.input.keyboard.addKey(Phaser.Keyboard.X);
+    this.paintMode = true;
 }
 //constructor
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -59,7 +63,10 @@ Player.prototype.update = function() {
 
         if (this.changeKey.justPressed) {
             //change sprites
+            //false = sword mode
+            this.paintMode = !this.paintMode;
         }
+
 
     //game.physics.arcade.overlap(this, Coral, Coral.hightlightThis(), null, this);
 };

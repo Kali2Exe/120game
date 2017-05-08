@@ -50,12 +50,13 @@ gameObj.Play.prototype = {
         game.add.existing(this.player);
 
         this.tick = 0;
+        this.overlap = false;
 
     },
 
     update: function () {
         this.borderR.visible = false;
-        game.physics.arcade.overlap(this.player, this.coralfg, this.highLightBorder, null, this);
+        this.overlap = false;
 
         //slow tick death for coral
         if (this.tick < game.time.now) {
@@ -64,17 +65,19 @@ gameObj.Play.prototype = {
                     coralA.health--;
                 }
             });
-            this.tick = game.time.now + 500;
+            this.tick = game.time.now + 5000;
         }
+        game.physics.arcade.overlap(this.player, this.coralfg, this.highLightBorder, null, this);
+
 
         //this.coralfg.forEach(function(coralB) {
             //});
             //update status of text
-            this.statusText.text = this.coralPic.status;
-            this.statusText.addColor(this.coralPic.statColor, 0);
+        this.statusText.text = this.coralPic.status;
+        this.statusText.addColor(this.coralPic.statColor, 0);
 
-            this.healthText.text = this.coralPic.health;
-            this.healthText.addColor(this.coralPic.statColor, 0);
+        this.healthText.text = this.coralPic.health.toFixed(0);
+        this.healthText.addColor(this.coralPic.statColor, 0);
 
     },
 
@@ -82,6 +85,11 @@ gameObj.Play.prototype = {
         this.borderR.x = coralPic.x;
         this.borderR.y = coralPic.y;
         this.borderR.visible = true;
+
+        if (player.paintMode && player.useKey.isDown) {
+            coralPic.health += 0.05;
+            console.log("painting");
+        }
     }
 
 };
