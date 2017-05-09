@@ -14,6 +14,9 @@ function Coral (game, frame, x, y) {
     this.scale.x = 1;
     this.scale.y = 1;
 
+    this.x = x;
+    this.y = y;
+
     //enable physics and set to random velocity
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
@@ -26,6 +29,11 @@ function Coral (game, frame, x, y) {
 
     this.canHighLight = true;
 
+    this.statusText = "";
+    this.healthText = "";
+
+    this.healing = false;
+
 }
 
 
@@ -34,6 +42,11 @@ Coral.prototype = Object.create(Phaser.Sprite.prototype);
 Coral.prototype.constructor = Coral;
 
 Coral.prototype.update = function() {
+
+    //this.healing = false;
+    if (100 < this.health) {
+        this.health = 100;
+    }
 
     if (25 < this.health && this.health <= 50) {
         this.status = 'warning';
@@ -45,7 +58,10 @@ Coral.prototype.update = function() {
         this.status = 'dead';
         this.statColor = 'white';
         this.canHighLight = false;
+
+        //maybe play sound
     }
+
     //game.physics.arcade.overlap(player, this.bulletG4, this.lose, null, this);
     //wraps around world
     //game.world.wrap(this, 0, true);
