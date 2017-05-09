@@ -15,6 +15,7 @@ gameObj.Play.prototype = {
 		this.load.image('player', 'ship.png');
 		this.load.image('coral', 'teset.png');
         this.load.image('greenB', 'border_green.png');
+		this.load.image('enemy', 'enemy.png');
 
     },
 
@@ -50,6 +51,9 @@ gameObj.Play.prototype = {
 
         this.player = new Player(this, 'player');
         game.add.existing(this.player);
+		
+		this.enemy = new Enemy(this, 'enemy',400,400);
+		game.add.existing(this.enemy);
 
         this.tick = 0;
         this.overlap = false;
