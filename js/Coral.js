@@ -2,10 +2,10 @@
  * Created by kevinwu on 5/4/17.
  */
 
-function Coral (game, frame, x, y) {
+function Coral (game, key, frame, x, y) {
     //new Sprite(game, x, y, key, frame)
     //random x y location and uses Coral image
-    Phaser.Sprite.call(this, game, x, y, frame);
+    Phaser.Sprite.call(this, game, x, y, key, frame);
 
     //set anchor/origin to middle
     //this.anchor.set(0.5);
@@ -62,6 +62,11 @@ Coral.prototype.update = function() {
         //maybe play sound
     }
 
+    this.statusText.text = this.status;
+    this.statusText.addColor(this.statColor, 0);
+
+    this.healthText.text = this.health.toFixed(0);
+    this.healthText.addColor(this.statColor, 0);
     //game.physics.arcade.overlap(player, this.bulletG4, this.lose, null, this);
     //wraps around world
     //game.world.wrap(this, 0, true);
