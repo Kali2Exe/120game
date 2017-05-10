@@ -38,7 +38,11 @@ gameObj.Play.prototype = {
         for (var i = 0; i < 4; i++ ) {
             for (var j = 0; j < 6; j++){
                 this.count++;
-                this.coralPic = new Coral(this, 'atlas', 'vibrantcoral_' + this.count, j*200, i*200);
+                if (this.count < 10) {
+                    this.coralPic = new Coral(this, 'atlas', 'vibrantcoral_0' + this.count, j*200, i*200);
+                } else {
+                    this.coralPic = new Coral(this, 'atlas', 'vibrantcoral_' + this.count, j*200, i*200);
+                }
                 game.add.existing(this.coralPic);
                 this.coralfg.add(this.coralPic);
             }
