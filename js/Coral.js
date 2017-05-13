@@ -48,7 +48,12 @@ Coral.prototype.update = function() {
         this.health = 100;
     }
 
-    if (25 < this.health && this.health <= 50) {
+    //health status's
+    if (50 < this.health && this.health <= 100) {
+        this.status = 'healthy';
+        this.statColor = 'green';
+    }
+    else if (25 < this.health && this.health <= 50) {
         this.status = 'warning';
         this.statColor = 'orange';
     } else if (0 < this.health && this.health <= 25) {

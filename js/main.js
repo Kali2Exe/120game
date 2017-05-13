@@ -16,6 +16,7 @@ gameObj.Boot.prototype = {
 		//main use of Boot to load atlas from assets/img
 		this.load.path = 'assets/img/';
         this.load.atlasJSONHash('atlas', 'sprites.png', 'sprites.json');
+        this.load.atlasJSONHash('fishy', 'fishy.png', 'fishy.json');
 
 		this.good = true;
 
@@ -189,7 +190,7 @@ gameObj.Play.prototype = {
         this.borderR = game.add.image(0, 0, 'greenB');
         this.borderR.visible = false;
 
-        this.player = new Player(this, 'player');
+        this.player = new Player(this.game, 'fishy', 'fishy1');
         game.add.existing(this.player);
 
         this.tick = 0;
@@ -209,7 +210,7 @@ gameObj.Play.prototype = {
     update: function () {
 
         //number of dead coral check
-        if (this.countD % 180 == 0) {
+        if (this.countD % 120 == 0) {
             this.coralfg.forEach(function(coralA) {
                 if (!coralA.canHighLight) {
                     countOfDied += 1;
