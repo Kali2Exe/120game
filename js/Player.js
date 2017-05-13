@@ -4,10 +4,10 @@
 
 //creates a Player object
 //player also needs another frame for second image
-function Player(game, frame) {
+function Player(game, key, frame) {
     //new Sprite(game, x, y, key, frame)
     //random x y location and uses Player image
-    Phaser.Sprite.call(this, game, 200, 200, frame);
+    Phaser.Sprite.call(this, game, 200, 200, key, frame);
 
     //set anchor/origin to middle
     this.anchor.set(0.5);
@@ -16,7 +16,11 @@ function Player(game, frame) {
     this.scale.x = 1;
     this.scale.y = 1;
 
-    this.speed = 5;
+    //fish animation
+    this.animations.add('swim1', Phaser.Animation.generateFrameNames('fishy', 1, 5, '', 1), 9, true);
+    this.animations.play('swim1');
+
+    this.speed = 10;
     //enable physics and set to random velocity
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
@@ -49,10 +53,12 @@ Player.prototype.update = function () {
     this.swording = false;
     if (this.cursors.left.isDown) {
         this.x -= this.speed;
+        this.scale.x = -1;
 
     } else if (this.cursors.right.isDown) {
         //If press right, go right
         this.x += this.speed;
+        this.scale.x = 1;
 
     }
 

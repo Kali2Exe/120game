@@ -48,7 +48,12 @@ Coral.prototype.update = function() {
         this.health = 100;
     }
 
-    if (25 < this.health && this.health <= 50) {
+    //health status's
+    if (50 < this.health && this.health <= 100) {
+        this.status = 'healthy';
+        this.statColor = 'green';
+    }
+    else if (25 < this.health && this.health <= 50) {
         this.status = 'warning';
         this.statColor = 'orange';
     } else if (0 < this.health && this.health <= 25) {
@@ -62,6 +67,11 @@ Coral.prototype.update = function() {
         //maybe play sound
     }
 
+    this.statusText.text = this.status;
+    this.statusText.addColor(this.statColor, 0);
+
+    this.healthText.text = this.health.toFixed(0);
+    this.healthText.addColor(this.statColor, 0);
     //game.physics.arcade.overlap(player, this.bulletG4, this.lose, null, this);
     //wraps around world
     //game.world.wrap(this, 0, true);
