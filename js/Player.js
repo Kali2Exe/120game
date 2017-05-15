@@ -7,7 +7,7 @@
 function Player(game, key, frame) {
     //new Sprite(game, x, y, key, frame)
     //random x y location and uses Player image
-    Phaser.Sprite.call(this, game, 200, 200, key, frame);
+    Phaser.Sprite.call(this, game, 600, 400, key, frame);
 
     //set anchor/origin to middle
     this.anchor.set(0.5);
@@ -40,6 +40,9 @@ function Player(game, key, frame) {
     this.speed = 10;
     //this.painting = false;
     //this.swording = false;
+
+    this.paint = 100;
+    this.paintText = "";
 }
 //constructor
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -54,10 +57,13 @@ Player.prototype.update = function () {
      */
     //wraps around world
     //game.world.wrap(this, 0, true);
+    //this.health.toFixed(0)
 
-    //character/bird sprite movement that is 8 directions
-    this.painting = false;
-    this.swording = false;
+    this.paintText.text = this.paint.toFixed(0);
+    //this.painting = false;
+    //this.swording = false;
+
+    //movement controls
     if (this.cursors.left.isDown) {
         this.x -= this.speed;
         this.scale.x = -1;
@@ -78,12 +84,19 @@ Player.prototype.update = function () {
         this.y -= this.speed;
     }
 
+    //change key control
     if (this.changeKey.justPressed) {
         //change sprites
         //false = sword mode
         this.paintMode = !this.paintMode;
     }
 
+    //paintMeter Check
+    if (100 < this.paint) {
+        this.paint = 100;
+    } else if (this.paint < 0) {
+        this.paint = 0;
+    }
     /*if (this.useKey.isDown && this.paintMode) {
         this.painting = true;
     } else if (this.useKey.isDown && !this.paintMode) {

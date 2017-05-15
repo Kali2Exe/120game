@@ -17,6 +17,7 @@ gameObj.Boot.prototype = {
 		this.load.path = 'assets/img/';
         this.load.atlasJSONHash('atlas', 'sprites.png', 'sprites.json');
         this.load.atlasJSONHash('fishy', 'fishy.png', 'fishy.json');
+        this.load.atlasJSONHash('jelly', 'jelly.png', 'jelly.json');
 
 		this.good = true;
 
@@ -186,12 +187,24 @@ gameObj.Play.prototype = {
         //test status text: will have to change later as part of coral
         //this.healthText.anchor.set(0.5);
 
+        this.paintFillGroup = game.add.group();
+        this.paintFillGroup.enableBody = true;
+
+        for (var nm = 0; nm < 2; nm++) {
+            this.paintfill = new PaintFiller(this.game, 'jelly', 'jelly1', ((nm*600)+300), 200);
+            game.add.existing(this.paintfill);
+            this.paintFillGroup.add(this.paintfill);
+        }
+
+        //adding player sprite
+        this.player = new Player(this.game, 'fishy', 'fishy1');
+        game.add.existing(this.player);
+        this.player.paintText = game.add.text(1100, 10, this.player.paint, {fontSize: '32px', fill: "red"});
+
+
         //when player goes over section, uses image highlight
         this.borderR = game.add.image(0, 0, 'greenB');
         this.borderR.visible = false;
-
-        this.player = new Player(this.game, 'fishy', 'fishy1');
-        game.add.existing(this.player);
 
         this.tick = 0;
         this.overlap = false;
@@ -230,6 +243,9 @@ gameObj.Play.prototype = {
         this.borderR.visible = false;
         this.overlap = false;
 
+        game.physics.arcade.overlap(this.player, this.coralfg, this.highLightBorder, null, this);
+        game.physics.arcade.overlap(this.player, this.paintFillGroup, this.fillPaintMeter, null, this);
+
         //slow tick death for coral
         if (this.tick < game.time.now) {
             this.coralfg.forEach(function(coralA) {
@@ -246,8 +262,6 @@ gameObj.Play.prototype = {
            }
         }
 
-        game.physics.arcade.overlap(this.player, this.coralfg, this.highLightBorder, null, this);
-
         //this.coralfg.forEach(function(coralB) {
             //});
             //update status of text
@@ -259,6 +273,8 @@ gameObj.Play.prototype = {
         this.countD += 1;
     },
 
+    //if player overlap coral, highlight it
+    //if player press use key and has paint, heal
     highLightBorder: function(player, coralPic) {
         if (coralPic.canHighLight) {
             this.borderR.x = coralPic.x;
@@ -266,17 +282,24 @@ gameObj.Play.prototype = {
             this.borderR.visible = true;
         }
 
-        if (player.paintMode && player.useKey.isDown && coralPic.health > 0) {
+        if (player.paintMode && player.useKey.isDown && coralPic.health > 0 && player.paint > 0 && this.borderR.visible) {
             this.affectedCoral = coralPic;
             coralPic.health += 0.1;
             coralPic.healing = true;
+            player.paint -= 0.2;
             console.log("painting");
+        }
+    },
+
+    fillPaintMeter: function(player, paintJelly) {
+        if (player.paint < 100) {
+            player.paint += 0.4;
         }
     },
 
     render: function() {
 		//game.debug.text(`Debugging Phaser ${Phaser.VERSION}`, 20, 20, 'yellow');
-		game.debug.text('FPS: ' + game.time.fps, 20, 480, 'yellow');
+		game.debug.text('FPS: ' + game.time.fps, 20, 1180, 'yellow');
 
 		//if shift held, you can see hitcircle for bird
 
@@ -285,9 +308,12 @@ gameObj.Play.prototype = {
 			//game.debug.body(this.grazeRadius);
 
 			game.debug.body(this.player);
+			this.paintFillGroup.forEach(function(jelly) {
+			    game.debug.body(jelly);
+            });
 		}
 
-	},
+	}
 
 };
 
