@@ -15,7 +15,7 @@ function PaintFiller (game, key, frame, x, y) {
     this.scale.y = 0.5;
 
     //add animation
-    this.animations.add('bounce', Phaser.Animation.generateFrameNames('jelly', 1, 4, '', 1), 9, true);
+    this.animations.add('bounce', Phaser.Animation.generateFrameNames('jelly', 1, 4, '', 1), 4, true);
     this.animations.play('bounce');
 
     //enable physics and set to random velocity
