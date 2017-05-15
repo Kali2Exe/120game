@@ -207,7 +207,6 @@ gameObj.Play.prototype = {
         this.borderR.visible = false;
 
         this.tick = 0;
-        this.overlap = false;
 
         //overlapping coral that will be healed
         this.affectedCoral = null;
@@ -222,6 +221,7 @@ gameObj.Play.prototype = {
 
     update: function () {
 
+        //change later to timer event
         //number of dead coral check
         if (this.countD % 120 == 0) {
             this.coralfg.forEach(function(coralA) {
@@ -240,12 +240,7 @@ gameObj.Play.prototype = {
             }
         }
 
-        this.borderR.visible = false;
-        this.overlap = false;
-
-        game.physics.arcade.overlap(this.player, this.coralfg, this.highLightBorder, null, this);
-        game.physics.arcade.overlap(this.player, this.paintFillGroup, this.fillPaintMeter, null, this);
-
+        //change later to timer event
         //slow tick death for coral
         if (this.tick < game.time.now) {
             this.coralfg.forEach(function(coralA) {
@@ -257,10 +252,15 @@ gameObj.Play.prototype = {
             this.tick = game.time.now + 500;
 
             //if player is highlighting a coral and healing it, for the system to work, this must be here
-            if(this.affectedCoral != null) {
-             this.affectedCoral.healing = false;
-           }
+            /*if(this.affectedCoral != null) {
+                this.affectedCoral.healing = false;
+            }*/
         }
+
+        this.borderR.visible = false;
+
+        game.physics.arcade.overlap(this.player, this.coralfg, this.highLightBorder, null, this);
+        game.physics.arcade.overlap(this.player, this.paintFillGroup, this.fillPaintMeter, null, this);
 
         //this.coralfg.forEach(function(coralB) {
             //});
@@ -276,16 +276,26 @@ gameObj.Play.prototype = {
     //if player overlap coral, highlight it
     //if player press use key and has paint, heal
     highLightBorder: function(player, coralPic) {
-        if (coralPic.canHighLight) {
-            this.borderR.x = coralPic.x;
-            this.borderR.y = coralPic.y;
+
+        //needed to fix healing:  if coral not same coral you are overlapping before, switch
+        if (this.affectedCoral == null) {
+            this.affectedCoral = coralPic;
+        }
+        if (this.affectedCoral != coralPic) {
+            this.affectedCoral.healing = false;
+            this.affectedCoral = coralPic;
+        }
+
+        if (this.affectedCoral.canHighLight) {
+            this.borderR.x = this.affectedCoral.x;
+            this.borderR.y = this.affectedCoral.y;
             this.borderR.visible = true;
         }
 
-        if (player.paintMode && player.useKey.isDown && coralPic.health > 0 && player.paint > 0 && this.borderR.visible) {
-            this.affectedCoral = coralPic;
-            coralPic.health += 0.1;
-            coralPic.healing = true;
+        if (player.paintMode && player.useKey.isDown && this.affectedCoral.health > 0 && player.paint > 0 && this.borderR.visible) {
+            //this.affectedCoral = coralPic;
+            this.affectedCoral.health += 0.1;
+            this.affectedCoral.healing = true;
             player.paint -= 0.2;
             console.log("painting");
         }
