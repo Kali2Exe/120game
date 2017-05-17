@@ -24,10 +24,15 @@ function Player(game, key, frame) {
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
 
+    this.body.drag.set(250);
+    this.body.acceleration.set(8);
+    this.body.maxVelocity.set(400);
+    //this.body.minVelocity = 0;
+
     this.radius = this.width / 6;
     this.body.setCircle(
         this.radius,
-        (-this.radius + 0.5 * this.width / this.scale.x),
+        (-this.radius + 0.5 * this.width +25/ this.scale.x),
         (-this.radius + 0.5 * this.height / this.scale.y)
     );
     //this.body.velocity.x = game.rnd.integerInRange(0, 400);
@@ -60,29 +65,42 @@ Player.prototype.update = function () {
     //this.health.toFixed(0)
 
     this.paintText.text = this.paint.toFixed(0);
+    this.paintText.x = this.x;
+    this.paintText.y = this.y-65;
     //this.painting = false;
     //this.swording = false;
 
     //movement controls
     if (this.cursors.left.isDown) {
-        this.x -= this.speed;
+        //this.x -= this.speed;
+        this.body.velocity.x = -200;
+        //this.body.acceleration.x = -8;
         this.scale.x = -1;
+        //when char flips, then the image will also flip
 
     } else if (this.cursors.right.isDown) {
         //If press right, go right
-        this.x += this.speed;
+        //this.x += this.speed;
+        this.body.velocity.x = 200;
+        //this.body.acceleration.x = 8;
         this.scale.x = 1;
 
     }
 
     if (this.cursors.down.isDown) {
         //If press down, move down
-        this.y += this.speed;
+        //this.y += this.speed;
+        this.body.velocity.y = 150;
+        //this.body.acceleration.y = 8;
 
     } else if (this.cursors.up.isDown) {
         //If press up, go up
-        this.y -= this.speed;
+        //this.y -= this.speed;
+        this.body.velocity.y = -150;
+        //this.body.acceleration.y = -8;
     }
+
+    this.body.acceleration = -50;
 
     //change key control
     if (this.changeKey.justPressed) {
