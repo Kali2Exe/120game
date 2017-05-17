@@ -39,8 +39,9 @@ gameObj.Preloader.prototype = {
         console.log('Preloader: preload');
 
         this.load.image('bg', 'vibrantbg.png');
+        this.load.image('bg2', 'BG_mid.png');
         //vibrantcoral_1
-        this.load.image('player', 'ship.png');
+        //this.load.image('player', 'ship.png');
         //this.load.image('coral', 'teset.png');
         this.load.image('greenB', 'border_green.png');
         //custom load screen.  loads image1 from atlas
@@ -150,8 +151,8 @@ gameObj.Play.prototype = {
     create: function () {
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        game.stage.backgroundColor = '#4da6ff';
-
+        game.stage.backgroundColor = '#ccffff';
+        this.tileBack = game.add.tileSprite(0, 0, 1200, 800, 'bg2');
         //coral group for adding coral pictures
         this.coralfg = game.add.group();
         this.coralfg.enableBody = true;
@@ -311,18 +312,19 @@ gameObj.Play.prototype = {
         }
 
 
-        if (player.paintMode && player.useKey.isDown && this.affectedCoral.health > 0 && player.paint > 0 && this.borderR.visible) {
+        if (player.paintMode && player.useKey.isDown && this.affectedCoral.health > 0 && this.affectedCoral.health < 100
+                && player.paint > 0 && this.borderR.visible) {
             //this.affectedCoral = coralPic;
-            this.affectedCoral.health += 0.1;
+            this.affectedCoral.health += 0.4;
             this.affectedCoral.healing = true;
-            player.paint -= 0.2;
+            player.paint -= 0.1;
             console.log("painting");
         }
     },
 
     fillPaintMeter: function (player, paintJelly) {
         if (player.paint < 100) {
-            player.paint += 0.4;
+            player.paint += 0.8;
         }
     },
 

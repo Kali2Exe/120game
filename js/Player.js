@@ -25,7 +25,7 @@ function Player(game, key, frame) {
     this.body.collideWorldBounds = true;
 
     this.body.drag.set(250);
-    this.body.acceleration.set(8);
+    this.body.acceleration.set(7);
     this.body.maxVelocity.set(400);
     //this.body.minVelocity = 0;
 
@@ -90,13 +90,13 @@ Player.prototype.update = function () {
     if (this.cursors.down.isDown) {
         //If press down, move down
         //this.y += this.speed;
-        this.body.velocity.y = 150;
+        this.body.velocity.y = 200;
         //this.body.acceleration.y = 8;
 
     } else if (this.cursors.up.isDown) {
         //If press up, go up
         //this.y -= this.speed;
-        this.body.velocity.y = -150;
+        this.body.velocity.y = -200;
         //this.body.acceleration.y = -8;
     }
 
