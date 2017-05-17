@@ -7,7 +7,7 @@
 function Player(game, key, frame) {
     //new Sprite(game, x, y, key, frame)
     //random x y location and uses Player image
-    Phaser.Sprite.call(this, game, 200, 200, key, frame);
+    Phaser.Sprite.call(this, game, 600, 400, key, frame);
 
     //set anchor/origin to middle
     this.anchor.set(0.5);
@@ -20,10 +20,21 @@ function Player(game, key, frame) {
     this.animations.add('swim1', Phaser.Animation.generateFrameNames('fishy', 1, 5, '', 1), 9, true);
     this.animations.play('swim1');
 
-    this.speed = 10;
     //enable physics and set to random velocity
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
+
+    this.body.drag.set(250);
+    this.body.acceleration.set(7);
+    this.body.maxVelocity.set(400);
+    //this.body.minVelocity = 0;
+
+    this.radius = this.width / 6;
+    this.body.setCircle(
+        this.radius,
+        (-this.radius + 0.5 * this.width +25/ this.scale.x),
+        (-this.radius + 0.5 * this.height / this.scale.y)
+    );
     //this.body.velocity.x = game.rnd.integerInRange(0, 400);
 
     this.cursors = game.input.keyboard.createCursorKeys();
@@ -31,8 +42,12 @@ function Player(game, key, frame) {
 
     this.useKey = game.input.keyboard.addKey(Phaser.Keyboard.X);
     this.paintMode = true;
+    this.speed = 10;
     //this.painting = false;
     //this.swording = false;
+
+    this.paint = 100;
+    this.paintText = "";
 }
 //constructor
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -47,36 +62,59 @@ Player.prototype.update = function () {
      */
     //wraps around world
     //game.world.wrap(this, 0, true);
+    //this.health.toFixed(0)
 
-    //character/bird sprite movement that is 8 directions
-    this.painting = false;
-    this.swording = false;
+    this.paintText.text = this.paint.toFixed(0);
+    this.paintText.x = this.x;
+    this.paintText.y = this.y-65;
+    //this.painting = false;
+    //this.swording = false;
+
+    //movement controls
     if (this.cursors.left.isDown) {
-        this.x -= this.speed;
+        //this.x -= this.speed;
+        this.body.velocity.x = -200;
+        //this.body.acceleration.x = -8;
         this.scale.x = -1;
+        //when char flips, then the image will also flip
 
     } else if (this.cursors.right.isDown) {
         //If press right, go right
-        this.x += this.speed;
+        //this.x += this.speed;
+        this.body.velocity.x = 200;
+        //this.body.acceleration.x = 8;
         this.scale.x = 1;
 
     }
 
     if (this.cursors.down.isDown) {
         //If press down, move down
-        this.y += this.speed;
+        //this.y += this.speed;
+        this.body.velocity.y = 200;
+        //this.body.acceleration.y = 8;
 
     } else if (this.cursors.up.isDown) {
         //If press up, go up
-        this.y -= this.speed;
+        //this.y -= this.speed;
+        this.body.velocity.y = -200;
+        //this.body.acceleration.y = -8;
     }
 
+    this.body.acceleration = -50;
+
+    //change key control
     if (this.changeKey.justPressed) {
         //change sprites
         //false = sword mode
         this.paintMode = !this.paintMode;
     }
 
+    //paintMeter Check
+    if (100 < this.paint) {
+        this.paint = 100;
+    } else if (this.paint < 0) {
+        this.paint = 0;
+    }
     /*if (this.useKey.isDown && this.paintMode) {
         this.painting = true;
     } else if (this.useKey.isDown && !this.paintMode) {

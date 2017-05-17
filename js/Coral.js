@@ -46,6 +46,8 @@ Coral.prototype.update = function() {
     //this.healing = false;
     if (100 < this.health) {
         this.health = 100;
+    } else if (this.paint < 0) {
+        this.health = 0;
     }
 
     //health status's
