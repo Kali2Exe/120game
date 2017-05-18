@@ -273,7 +273,7 @@ gameObj.Play.prototype = {
                 }
                 //coralA.healing = false;
             });
-            this.tick = game.time.now + 500;
+            this.tick = game.time.now + 3000;
 
             //if player is highlighting a coral and healing it, for the system to work, this must be here
             /*if(this.affectedCoral != null) {
