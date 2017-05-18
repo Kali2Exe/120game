@@ -25,7 +25,7 @@ function Player(game, key, frame) {
     this.body.collideWorldBounds = true;
 
     this.body.drag.set(250);
-    this.body.acceleration.set(7);
+    this.body.acceleration.set(8);
     this.body.maxVelocity.set(400);
     //this.body.minVelocity = 0;
 

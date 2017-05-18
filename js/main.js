@@ -319,6 +319,8 @@ gameObj.Play.prototype = {
             this.affectedCoral.healing = true;
             player.paint -= 0.1;
             console.log("painting");
+        } else if (!player.useKey.isDown && this.affectedCoral.health > 0 && this.affectedCoral.health <= 100) {
+            this.affectedCoral.healing = false;
         }
     },
 
