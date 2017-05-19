@@ -18,6 +18,7 @@ gameObj.Boot.prototype = {
         this.load.atlasJSONHash('atlas', 'sprites.png', 'sprites.json');
         this.load.atlasJSONHash('fishy', 'fishy.png', 'fishy.json');
         this.load.atlasJSONHash('jelly', 'jelly.png', 'jelly.json');
+        this.load.atlasJSONHash('brushSon', 'brush.png', 'brush.json');
 
         this.good = true;
 
@@ -149,6 +150,9 @@ gameObj.Play.prototype = {
 
     //in create of Title, create the Title Screen with scrolling image
     create: function () {
+
+        game.time.advancedTiming = true;
+
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
         game.stage.backgroundColor = '#ccffff';
@@ -215,12 +219,12 @@ gameObj.Play.prototype = {
             this.paintFillGroup.add(this.paintfill);
         }
 
+        //this.wep = new Brush(this.game, 'brushSon', 'brush');
+
         //adding player sprite
-        this.player = new Player(this.game, 'fishy', 'fishy1');
-        game.add.existing(this.player);
+        this.player = new Player(this.game, 'fishy', 'fishy1', 'brushSon', 'brush_flipped');
         this.player.paintText = game.add.text(this.player.x, this.player.y-25, this.player.paint, {fontSize: '32px', fill: "red"});
         //this.player.addChild(this.player.paintText);
-
 
         //when player goes over section, uses image highlight
         this.borderR = game.add.image(0, 0, 'greenB');
@@ -273,7 +277,7 @@ gameObj.Play.prototype = {
                 }
                 //coralA.healing = false;
             });
-            this.tick = game.time.now + 3000;
+            this.tick = game.time.now + 1000;
 
             //if player is highlighting a coral and healing it, for the system to work, this must be here
             /*if(this.affectedCoral != null) {

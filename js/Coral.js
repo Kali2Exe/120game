@@ -43,6 +43,8 @@ Coral.prototype.constructor = Coral;
 
 Coral.prototype.update = function() {
 
+    this.alpha = this.health/100;
+
     //this.healing = false;
     if (100 < this.health) {
         this.health = 100;
