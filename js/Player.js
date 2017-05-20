@@ -4,10 +4,19 @@
 
 //creates a Player object
 //player also needs another frame for second image
-function Player(game, key, frame) {
+function Player(game, key, frame, key2, frame2) {
     //new Sprite(game, x, y, key, frame)
     //random x y location and uses Player image
+
+    //Phaser.Sprite.call(this, game, 600, 400, key2, 'brush');
+    //game.add.existing(this);
+
+    this.weapon = new Brush(game, key2, frame2);
+
     Phaser.Sprite.call(this, game, 600, 400, key, frame);
+    game.add.existing(this);
+
+    //this.addChild(this.weapon);
 
     //set anchor/origin to middle
     this.anchor.set(0.5);
@@ -38,7 +47,7 @@ function Player(game, key, frame) {
     //this.body.velocity.x = game.rnd.integerInRange(0, 400);
 
     this.cursors = game.input.keyboard.createCursorKeys();
-    this.changeKey = game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+    this.changeKey = game.input.keyboard.addKey(Phaser.Keyboard.C);
 
     this.useKey = game.input.keyboard.addKey(Phaser.Keyboard.X);
     this.paintMode = true;
@@ -48,6 +57,8 @@ function Player(game, key, frame) {
 
     this.paint = 100;
     this.paintText = "";
+
+    this.leftFace = false;
 }
 //constructor
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -64,9 +75,8 @@ Player.prototype.update = function () {
     //game.world.wrap(this, 0, true);
     //this.health.toFixed(0)
 
-    this.paintText.text = this.paint.toFixed(0);
-    this.paintText.x = this.x;
-    this.paintText.y = this.y-65;
+    //leftFace logic for correct setting of meter and brush sprite
+
     //this.painting = false;
     //this.swording = false;
 
@@ -76,6 +86,10 @@ Player.prototype.update = function () {
         this.body.velocity.x = -200;
         //this.body.acceleration.x = -8;
         this.scale.x = -1;
+
+        this.weapon.scale.x = -1;
+
+        this.leftFace = true;
         //when char flips, then the image will also flip
 
     } else if (this.cursors.right.isDown) {
@@ -84,6 +98,10 @@ Player.prototype.update = function () {
         this.body.velocity.x = 200;
         //this.body.acceleration.x = 8;
         this.scale.x = 1;
+
+        this.weapon.scale.x = 1;
+
+        this.leftFace = false;
 
     }
 
@@ -100,13 +118,37 @@ Player.prototype.update = function () {
         //this.body.acceleration.y = -8;
     }
 
+    if (!this.leftFace) {
+        //rightface
+        this.weapon.x = this.x+65;
+        this.weapon.y = this.y;
+
+        this.paintText.text = this.paint.toFixed(0);
+        this.paintText.x = this.x;
+        this.paintText.y = this.y-65;
+    } else  {
+        //leftface
+        this.weapon.x = this.x-65;
+        this.weapon.y = this.y;
+
+        this.paintText.text = this.paint.toFixed(0);
+        this.paintText.x = this.x-40;
+        this.paintText.y = this.y-65;
+    }
+
     this.body.acceleration = -50;
 
     //change key control
-    if (this.changeKey.justPressed) {
+    if (this.changeKey.justPressed()) {
         //change sprites
         //false = sword mode
-        this.paintMode = !this.paintMode;
+        if (this.paintMode) {
+            this.weapon.animations.play('brushToPen');
+            this.paintMode = false;
+        } else {
+            this.weapon.animations.play('penToBrush');
+            this.paintMode = true;
+        }
     }
 
     //paintMeter Check
@@ -115,11 +157,13 @@ Player.prototype.update = function () {
     } else if (this.paint < 0) {
         this.paint = 0;
     }
-    /*if (this.useKey.isDown && this.paintMode) {
-        this.painting = true;
+    if (this.useKey.isDown && this.paintMode) {
+        this.weapon.animations.play('paint');
     } else if (this.useKey.isDown && !this.paintMode) {
-        this.swording = true;
-    }*/
+        //this.swording = true;
+        //for sword mode
+        //this.weapon.animations.play('attack');
+    }
 
 
     //game.physics.arcade.overlap(this, Coral, Coral.hightlightThis(), null, this);
