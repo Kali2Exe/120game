@@ -40,7 +40,7 @@ gameObj.Preloader.prototype = {
         console.log('Preloader: preload');
 
         this.load.image('bg', 'vibrantbg.png');
-        this.load.image('bg2', 'BG_mid.png');
+        this.load.image('bg2', 'BG-4.jpg');
         //vibrantcoral_1
         //this.load.image('player', 'ship.png');
         //this.load.image('coral', 'teset.png');
