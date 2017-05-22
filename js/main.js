@@ -19,6 +19,7 @@ gameObj.Boot.prototype = {
         this.load.atlasJSONHash('fishy', 'fishy.png', 'fishy.json');
         this.load.atlasJSONHash('jelly', 'jelly.png', 'jelly.json');
         this.load.atlasJSONHash('brushSon', 'brush.png', 'brush.json');
+        this.load.atlasJSONHash('enemy', 'enemy.png', 'enemy.json');
 
         this.good = true;
 
@@ -161,7 +162,7 @@ gameObj.Play.prototype = {
         this.coralfg = game.add.group();
         this.coralfg.enableBody = true;
 
-        //6 x 4 image place
+        //creating coral images
         this.count = 0;
 
         for (var i = 0; i < 6; i++) {
@@ -175,7 +176,7 @@ gameObj.Play.prototype = {
             }
 
         }
-
+        //second row of coral
         for (var j = 0; j < 6; j++) {
             this.count++;
             if (this.count < 10) {
@@ -187,14 +188,7 @@ gameObj.Play.prototype = {
             this.coralfg.add(this.coralPic);
         }
 
-
-        /*this.coralPic = new Coral(this, 'coral', 400, 400);
-         game.add.existing(this.coralPic);
-         this.coralfg.add(this.coralPic);
-         this.coralPic = new Coral(this, 'coral', 600, 400);
-         game.add.existing(this.coralPic);
-         this.coralfg.add(this.coralPic);*/
-
+        //adding coral text that will keep track of things
         this.coralfg.forEach(function (coralA) {
             coralA.statusText = game.add.text(coralA.x + 100, coralA.y + 100, coralA.status, {
                 fontSize: '32px',
@@ -210,6 +204,7 @@ gameObj.Play.prototype = {
         //test status text: will have to change later as part of coral
         //this.healthText.anchor.set(0.5);
 
+        //paint fillers
         this.paintFillGroup = game.add.group();
         this.paintFillGroup.enableBody = true;
 
@@ -219,7 +214,17 @@ gameObj.Play.prototype = {
             this.paintFillGroup.add(this.paintfill);
         }
 
-        //this.wep = new Brush(this.game, 'brushSon', 'brush');
+        //enemy creater, spawner
+
+        //enemy Spawner and shit
+        this.enemyGroup = game.add.group();
+        this.enemyGroup.enableBody = true;
+
+        this.enemySpawner = game.time.create();
+        this.enemySpawner.loop(3000, function() {
+            this.enemyFish = new Enemy(this.game, 'enemy', 'enemyR1', Math.random() * (1200 -0), Math.random() * (1200- 0), 'enemy', 'eraserR1');
+            this.enemyGroup.add(this.enemyFish);
+        }, this);
 
         //adding player sprite
         this.player = new Player(this.game, 'fishy', 'fishy1', 'brushSon', 'brush_flipped');
@@ -240,6 +245,12 @@ gameObj.Play.prototype = {
 
         countOfDied = 0;
         this.countD = 0;
+
+        //repeat event (delay, repeatCount, callback, context, arguments
+        //testing purposes only: 3000
+        //real game: 30000
+        this.player.bringToTop();
+        this.enemySpawner.start();
 
     },
 
@@ -264,10 +275,15 @@ gameObj.Play.prototype = {
             }
         }
 
+        this.enemyGroup.forEach(function (enemyA) {
+            enemyA.body.velocity.setTo(enemyA.vel, enemyA.vel);
+        });
+
         this.borderR.visible = false;
 
         game.physics.arcade.overlap(this.player, this.coralfg, this.highLightBorder, null, this);
         game.physics.arcade.overlap(this.player, this.paintFillGroup, this.fillPaintMeter, null, this);
+        game.physics.arcade.overlap(this.enemyGroup, this.coralfg, this.attackedCoral, null, this);
         //change later to timer event
         //slow tick death for coral
         if (this.tick < game.time.now) {
@@ -334,6 +350,12 @@ gameObj.Play.prototype = {
         }
     },
 
+    attackedCoral: function(enemy, coral) {
+        //enemy.body.velocity.setTo(50, 50);
+        enemy.attack();
+        coral.health = coral.health -0.02;
+    },
+
     render: function () {
         //game.debug.text(`Debugging Phaser ${Phaser.VERSION}`, 20, 20, 'yellow');
         game.debug.text('FPS: ' + game.time.fps, 20, 1180, 'yellow');
@@ -347,6 +369,9 @@ gameObj.Play.prototype = {
             game.debug.body(this.player);
             this.paintFillGroup.forEach(function (jelly) {
                 game.debug.body(jelly);
+            });
+            this.enemyGroup.forEach(function (enemy) {
+                game.debug.body(enemy);
             });
         }
 
@@ -383,7 +408,6 @@ gameObj.GameOverScreen.prototype = {
         this.exitT2.anchor.set(0.5);
 
 
-        //death animation of bird that plays over and over.  Just looks cute
 
         //Press keys to go back to title or replay
         this.shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
