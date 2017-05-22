@@ -6,7 +6,7 @@ function PaintFiller (game, key, frame, x, y) {
     //new Sprite(game, x, y, key, frame)
     //random x y location and uses PaintFiller image
     Phaser.Sprite.call(this, game, x, y, key, frame);
-
+    game.add.existing(this);
     //set anchor/origin to middle
     this.anchor.set(0.5);
 

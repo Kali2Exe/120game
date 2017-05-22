@@ -210,7 +210,7 @@ gameObj.Play.prototype = {
 
         for (var nm = 0; nm < 2; nm++) {
             this.paintfill = new PaintFiller(this.game, 'jelly', 'jelly1', ((nm * 600) + 300), 200);
-            game.add.existing(this.paintfill);
+            //game.add.existing(this.paintfill);
             this.paintFillGroup.add(this.paintfill);
         }
 
@@ -222,7 +222,7 @@ gameObj.Play.prototype = {
 
         this.enemySpawner = game.time.create();
         this.enemySpawner.loop(3000, function() {
-            this.enemyFish = new Enemy(this.game, 'enemy', 'enemyR1', Math.random() * (1200 -0), Math.random() * (1200- 0), 'enemy', 'eraserR1');
+            this.enemyFish = new Enemy(game, 'enemy', 'enemyR1', 'enemy', 'eraserR1');
             this.enemyGroup.add(this.enemyFish);
         }, this);
 
@@ -230,6 +230,11 @@ gameObj.Play.prototype = {
         this.player = new Player(this.game, 'fishy', 'fishy1', 'brushSon', 'brush_flipped');
         this.player.paintText = game.add.text(this.player.x, this.player.y-25, this.player.paint, {fontSize: '32px', fill: "red"});
         //this.player.addChild(this.player.paintText);
+
+        //need invisible walls....
+        //this.grazeRadius = game.add.sprite(this.bird.x, this.bird.y-240);
+		//this.game.physics.arcade.enable(this.grazeRadius);
+		//this.grazeRadius.body.collideWorldBounds = false;
 
         //when player goes over section, uses image highlight
         this.borderR = game.add.image(0, 0, 'greenB');
@@ -275,9 +280,9 @@ gameObj.Play.prototype = {
             }
         }
 
-        this.enemyGroup.forEach(function (enemyA) {
+        /*this.enemyGroup.forEach(function (enemyA) {
             enemyA.body.velocity.setTo(enemyA.vel, enemyA.vel);
-        });
+        });*/
 
         this.borderR.visible = false;
 
