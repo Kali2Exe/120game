@@ -232,9 +232,12 @@ gameObj.Play.prototype = {
         //this.player.addChild(this.player.paintText);
 
         //need invisible walls....
-        //this.grazeRadius = game.add.sprite(this.bird.x, this.bird.y-240);
-		//this.game.physics.arcade.enable(this.grazeRadius);
-		//this.grazeRadius.body.collideWorldBounds = false;
+        this.wallGroup = game.add.group();
+        this.wallGroup.enableBody = true;
+        this.wall1 = new Wall(this.game, 10, 400);
+        this.wallGroup.add(this.wall1);
+        this.wall2 = new Wall(this.game, game.world.width, 400);
+        this.wallGroup.add(this.wall2);
 
         //when player goes over section, uses image highlight
         this.borderR = game.add.image(0, 0, 'greenB');
@@ -289,6 +292,7 @@ gameObj.Play.prototype = {
         game.physics.arcade.overlap(this.player, this.coralfg, this.highLightBorder, null, this);
         game.physics.arcade.overlap(this.player, this.paintFillGroup, this.fillPaintMeter, null, this);
         game.physics.arcade.overlap(this.enemyGroup, this.coralfg, this.attackedCoral, null, this);
+        game.physics.arcade.collide(this.enemyGroup, this.wallGroup, this.collideWithWall);
         //change later to timer event
         //slow tick death for coral
         if (this.tick < game.time.now) {
@@ -298,7 +302,7 @@ gameObj.Play.prototype = {
                 }
                 //coralA.healing = false;
             });
-            this.tick = game.time.now + 1000;
+            this.tick = game.time.now + 20000;
 
             //if player is highlighting a coral and healing it, for the system to work, this must be here
             /*if(this.affectedCoral != null) {
@@ -361,6 +365,11 @@ gameObj.Play.prototype = {
         coral.health = coral.health -0.02;
     },
 
+    collideWithWall: function(enemy, wall) {
+      enemy.leftFace = !enemy.leftFace;
+      console.log("hit");
+    },
+
     render: function () {
         //game.debug.text(`Debugging Phaser ${Phaser.VERSION}`, 20, 20, 'yellow');
         game.debug.text('FPS: ' + game.time.fps, 20, 1180, 'yellow');
@@ -377,6 +386,9 @@ gameObj.Play.prototype = {
             });
             this.enemyGroup.forEach(function (enemy) {
                 game.debug.body(enemy);
+            });
+            this.wallGroup.forEach(function (wall) {
+                game.debug.body(wall);
             });
         }
 
