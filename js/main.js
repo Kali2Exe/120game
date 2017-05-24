@@ -12,12 +12,6 @@ gameObj.Boot.prototype = {
         this.stage.disableVisibilityChange = false;
     },
     preload: function () {
-
-    	//CEMTER THE GAME
-        //game.scale.scaleMode = Phaser.ScaleManager.NO_SCALE; //EXACT_FIT, SHOW_ALL
-        this.game.scale.pageAlignHorizontally = true;
-        this.game.scale.pageAlignVertically = true;
-
         console.log('Boot: preload');
         //main use of Boot to load atlas from assets/img
         this.load.path = 'assets/img/';
@@ -152,9 +146,6 @@ gameObj.Play.prototype = {
         //console.log('Play: preload');
         //load assets
 
-        //load bgm
-        this.load.path = 'assets/audio/bgm/';
-        this.load.audio('bgm', 'ramune.mp3');
     },
 
     //in create of Title, create the Title Screen with scrolling image
@@ -169,13 +160,6 @@ gameObj.Play.prototype = {
         //coral group for adding coral pictures
         this.coralfg = game.add.group();
         this.coralfg.enableBody = true;
-
-        //SOUND STUFF
-        //add bgm
-        this.bgmSound = game.add.audio('bgm'); 
-
-        //play bgm
-        this.bgmSound.play('',0,.1,true); //(marker, position, volume, loop, forceRestart) → {Phaser.Sound}
 
         //6 x 4 image place
         this.count = 0;
