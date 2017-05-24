@@ -54,21 +54,19 @@ function Enemy (game, key, frame, key2, frame2) {
     this.scale.y = 1;
     this.eraser.scale.y = 1;
 
+    //animation
     this.animations.add('swimE', Phaser.Animation.generateFrameNames('enemyR', 1, 4, '', 1), 5, true);
     this.animations.play('swimE');
 
-    //velocity st
-    console.log(this.leftFace);
-    //this.body.velocity.x = 100;
-    //this.body.velocity.y = 100;
-
+    //velocity depending on facing left or right
     if (this.leftFace) {
         this.body.velocity.setTo(-100, -100);
     } else {
         this.body.velocity.setTo(100, 100);
     }
-    console.log(this.body.velocity);
+    //console.log(this.body.velocity);
 
+    //give fish bounce
     this.body.bounce.setTo(0.9, 0.9);
     //this.body.velocity.x = game.rnd.integerInRange(0, 400);
 
@@ -96,37 +94,17 @@ Enemy.prototype.update = function() {
         this.eraser.x = this.x + 46;
         this.eraser.y = this.y + 32;
     }
-    /*
-    if (!this.leftFace) {
-        //rightface
-        this.weapon.x = this.x+65;
-        this.weapon.y = this.y;
-
-        this.paintText.text = this.paint.toFixed(0);
-        this.paintText.x = this.x;
-        this.paintText.y = this.y-65;
-    } else  {
-        //leftface
-        this.weapon.x = this.x-65;
-        this.weapon.y = this.y;
-
-        this.paintText.text = this.paint.toFixed(0);
-        this.paintText.x = this.x-40;
-        this.paintText.y = this.y-65;
-    }*/
-    //wraps around world
-    //game.world.wrap(this, 0, true);
-
 
     //body touching
-
+    //if health is <= 0, kill and remove from group
     if (this.health <= 0) {
         this.kill();
-    }
+        this.eraser.kill();
 
-    /*if(this.x >= game.world.width -20|| this.x <= 20){ //80 = half of sprite width
-		this.leftFace = !this.leftFace;
-	}*/
+        this.destroy();
+        this.eraser.destroy();
+
+    }
 
 };
 

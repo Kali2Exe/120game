@@ -16,10 +16,12 @@ gameObj.Boot.prototype = {
         //main use of Boot to load atlas from assets/img
         this.load.path = 'assets/img/';
         this.load.atlasJSONHash('atlas', 'sprites.png', 'sprites.json');
+        this.load.atlasJSONHash('dead', 'spritesded.png', 'spritesded.json');
         this.load.atlasJSONHash('fishy', 'fishy.png', 'fishy.json');
         this.load.atlasJSONHash('jelly', 'jelly.png', 'jelly.json');
         this.load.atlasJSONHash('brushSon', 'brush.png', 'brush.json');
         this.load.atlasJSONHash('enemy', 'enemy.png', 'enemy.json');
+        //this.load.atlasJSONHash('stab', 'stab.png', 'stab.json');
 
         this.good = true;
 
@@ -46,6 +48,7 @@ gameObj.Preloader.prototype = {
         //this.load.image('player', 'ship.png');
         //this.load.image('coral', 'teset.png');
         this.load.image('greenB', 'border_green.png');
+        this.load.image('barv2', 'barv2.png');
         //custom load screen.  loads image1 from atlas
         //this.add.image(0,0, 'atlas', 'loadimage1');
 
@@ -95,16 +98,16 @@ gameObj.Title.prototype = {
         this.text.scale.set(0.5, 0.5);
         this.text2 = game.add.text(600, 300, 'Press ENTER to play', {fontSize: '32px', fill: 'white'});
         this.text2.anchor.set(0.5);
-        this.text3 = game.add.text(600, 400, 'arrows keys to move', {fontSize: '32px', fill: 'white'});
+        this.text3 = game.add.text(600, 400, 'Press SHIFT to see tutorial', {fontSize: '32px', fill: 'white'});
         this.text3.anchor.set(0.5);
-        this.text4 = game.add.text(600, 500, 'x to heal', {fontSize: '32px', fill: 'white'});
-        this.text4.anchor.set(0.5);
+
 
         //this.text6 = game.add.text(600, 20, 'Press 0 to toggle \ndebug/collision circles', {fontSize: '16px', fill: 'Red'});
 
         //set keys for playing game or for toggling debug/collision circles
         this.enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
         this.zeroKey = game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
+        this.shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
 
         // play Title music
         //this.playMusic();
@@ -116,11 +119,19 @@ gameObj.Title.prototype = {
         //if you press Enter, you go to Play screen
         if (this.enterKey.justPressed()) {
             //this.firstMusic.stop();
-            this.state.start('Play');
+            if (firstPlay) {
+                this.state.start('Tutorial');
+            } else {
+                this.state.start('Play');
+            }
         }
         //if press 0 (zero), toggle debugs
         if (this.zeroKey.justPressed()) {
             toggleDebug = !toggleDebug;
+        }
+
+        if(this.shiftKey.justPressed()) {
+            this.state.start('Tutorial');
         }
 
     }
@@ -135,6 +146,45 @@ gameObj.Title.prototype = {
      }*/
 
 
+};
+
+// Tutorial state
+//use for other things
+gameObj.Tutorial = function () {
+};
+gameObj.Tutorial.prototype = {
+    preload: function () {
+
+    },
+    create: function () {
+        console.log('Tutorial: create');
+
+        this.text = game.add.text(600, 200, 'Tutorial!!! (Placeholder)', {fontSize: '64px', fill: 'white'});
+        this.text.anchor.set(0.5);
+
+        //placeholder image for tutorial screen
+        //this.tutorialText = game.add.image(400, 150, 'atlas', 'gameOver');
+
+        this.enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+        this.zeroKey = game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
+        this.shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
+    },
+    update: function () {
+        //if you press Enter, you go to Play screen
+        if (this.enterKey.justPressed()) {
+            //this.firstMusic.stop();
+            this.state.start('Play');
+        }
+        //if press 0 (zero), toggle debugs
+        if (this.zeroKey.justPressed()) {
+            toggleDebug = !toggleDebug;
+        }
+
+        if(this.shiftKey.justPressed()) {
+            this.state.start('Title');
+        }
+
+    }
 };
 
 
@@ -162,6 +212,9 @@ gameObj.Play.prototype = {
         this.coralfg = game.add.group();
         this.coralfg.enableBody = true;
 
+        this.coralded = game.add.group();
+        this.coralded.enableBody = false;
+
         //creating coral images
         this.count = 0;
 
@@ -169,6 +222,9 @@ gameObj.Play.prototype = {
             this.count++;
             if (this.count < 10) {
                 if (i < 2 || 3 < i) {
+                    this.dedCoral = game.add.image(i*200, 400, 'dead', 'dedcoral_0'+ this.count);
+                    game.add.existing(this.dedCoral);
+                    this.coralded.add(this.dedCoral);
                     this.coralPic = new Coral(this, 'atlas', 'vibrantcoral_0' + this.count, i * 200, 400);
                     game.add.existing(this.coralPic);
                     this.coralfg.add(this.coralPic);
@@ -180,13 +236,21 @@ gameObj.Play.prototype = {
         for (var j = 0; j < 6; j++) {
             this.count++;
             if (this.count < 10) {
+                this.dedCoral = game.add.image(j*200, 600, 'dead', 'dedcoral_0'+ this.count);
                 this.coralPic = new Coral(this, 'atlas', 'vibrantcoral_0' + this.count, j * 200, 600);
             } else {
+                this.dedCoral = game.add.image(j*200, 600, 'dead', 'dedcoral_'+ this.count);
                 this.coralPic = new Coral(this, 'atlas', 'vibrantcoral_' + this.count, j * 200, 600);
             }
+            game.add.existing(this.dedCoral);
+            this.coralded.add(this.dedCoral);
             game.add.existing(this.coralPic);
             this.coralfg.add(this.coralPic);
         }
+
+        //need this to place coral under stuff
+        game.world.moveDown(this.coralded);
+        //game.world.moveUp(this.coralded);
 
         //adding coral text that will keep track of things
         this.coralfg.forEach(function (coralA) {
@@ -221,27 +285,29 @@ gameObj.Play.prototype = {
         this.enemyGroup.enableBody = true;
 
         this.enemySpawner = game.time.create();
-        this.enemySpawner.loop(3000, function() {
+        this.enemySpawner.loop(15000, function() {
             this.enemyFish = new Enemy(game, 'enemy', 'enemyR1', 'enemy', 'eraserR1');
             this.enemyGroup.add(this.enemyFish);
         }, this);
+
+        //need invisible walls....
+        this.wallGroup = game.add.group();
+        this.wallGroup.enableBody = true;
+        this.wall1 = new Wall(this.game, 2, -5);
+        this.wallGroup.add(this.wall1);
+        this.wall2 = new Wall(this.game, game.world.width-2, -5);
+        this.wallGroup.add(this.wall2);
+
+
+        //when player goes over section, uses image highlight
+        this.borderR = game.add.image(0, 0, 'greenB');
+        this.borderR.visible = false;
 
         //adding player sprite
         this.player = new Player(this.game, 'fishy', 'fishy1', 'brushSon', 'brush_flipped');
         this.player.paintText = game.add.text(this.player.x, this.player.y-25, this.player.paint, {fontSize: '32px', fill: "red"});
         //this.player.addChild(this.player.paintText);
 
-        //need invisible walls....
-        this.wallGroup = game.add.group();
-        this.wallGroup.enableBody = true;
-        this.wall1 = new Wall(this.game, 10, 400);
-        this.wallGroup.add(this.wall1);
-        this.wall2 = new Wall(this.game, game.world.width, 400);
-        this.wallGroup.add(this.wall2);
-
-        //when player goes over section, uses image highlight
-        this.borderR = game.add.image(0, 0, 'greenB');
-        this.borderR.visible = false;
 
         this.tick = 0;
 
@@ -275,7 +341,7 @@ gameObj.Play.prototype = {
                 }
                 //coralA.healing = false;
             });
-            if (countOfDied === 24) {
+            if (countOfDied === 10) {
                 this.state.start('GameOverScreen');
             } else {
                 this.countD = 0;
@@ -289,10 +355,12 @@ gameObj.Play.prototype = {
 
         this.borderR.visible = false;
 
+        //overlap and collide logic (see functions)
         game.physics.arcade.overlap(this.player, this.coralfg, this.highLightBorder, null, this);
         game.physics.arcade.overlap(this.player, this.paintFillGroup, this.fillPaintMeter, null, this);
         game.physics.arcade.overlap(this.enemyGroup, this.coralfg, this.attackedCoral, null, this);
         game.physics.arcade.collide(this.enemyGroup, this.wallGroup, this.collideWithWall);
+        game.physics.arcade.overlap(this.player.weapon, this.enemyGroup, this.attackedEnemy, null, this);
         //change later to timer event
         //slow tick death for coral
         if (this.tick < game.time.now) {
@@ -302,7 +370,7 @@ gameObj.Play.prototype = {
                 }
                 //coralA.healing = false;
             });
-            this.tick = game.time.now + 20000;
+            this.tick = game.time.now + 1000; //5000
 
             //if player is highlighting a coral and healing it, for the system to work, this must be here
             /*if(this.affectedCoral != null) {
@@ -310,10 +378,7 @@ gameObj.Play.prototype = {
              }*/
         }
 
-        //this.coralfg.forEach(function(coralB) {
-        //});
-        //update status of text
-
+        //debug toggle
         if (this.zeroKey.justPressed()) {
             toggleDebug = !toggleDebug;
         }
@@ -340,7 +405,7 @@ gameObj.Play.prototype = {
             this.borderR.visible = true;
         }
 
-
+        //DO NOT TOUCH
         if (player.paintMode && player.useKey.isDown && this.affectedCoral.health > 0 && this.affectedCoral.health < 100
                 && player.paint > 0 && this.borderR.visible) {
             //this.affectedCoral = coralPic;
@@ -353,26 +418,39 @@ gameObj.Play.prototype = {
         }
     },
 
+    //if overlap, fill paint again
     fillPaintMeter: function (player, paintJelly) {
         if (player.paint < 100) {
             player.paint += 0.8;
         }
     },
 
+    //if enemy overlap coral, do attacking animation and coral health reduction
     attackedCoral: function(enemy, coral) {
         //enemy.body.velocity.setTo(50, 50);
         enemy.attack();
-        coral.health = coral.health -0.02;
+        if (coral.health > 0) {
+            coral.health = coral.health -0.02;
+        }
     },
 
+    //if attacking enemy in pen mode, decrease enemy health
+    attackedEnemy: function(weapon, enemy) {
+
+        if (!this.player.paintMode && this.player.useKey.isDown) {
+            enemy.health--;
+        }
+    },
+
+    //if collide with wall, enemy turns left or right
     collideWithWall: function(enemy, wall) {
       enemy.leftFace = !enemy.leftFace;
-      console.log("hit");
+      //console.log("hit");
     },
 
     render: function () {
         //game.debug.text(`Debugging Phaser ${Phaser.VERSION}`, 20, 20, 'yellow');
-        game.debug.text('FPS: ' + game.time.fps, 20, 1180, 'yellow');
+        game.debug.text('FPS: ' + game.time.fps, 20, 20, 'yellow');
 
         //if shift held, you can see hitcircle for bird
 
@@ -381,6 +459,7 @@ gameObj.Play.prototype = {
             //game.debug.body(this.grazeRadius);
 
             game.debug.body(this.player);
+            game.debug.body(this.player.weapon);
             this.paintFillGroup.forEach(function (jelly) {
                 game.debug.body(jelly);
             });
@@ -437,6 +516,10 @@ gameObj.GameOverScreen.prototype = {
 
     update: function () {
         //if shift pressed, go to Title.  if enter key pressed, go to Play state and play again.
+
+        if (firstPlay === true) {
+            firstPlay = false;
+        }
         if (this.shiftKey.justPressed()) {
             //this.deathM.stop();
             this.state.start('Title');
@@ -450,12 +533,14 @@ gameObj.GameOverScreen.prototype = {
 
 // init game
 var game = new Phaser.Game(1200, 800, Phaser.AUTO);
-game.state.add('Play', gameObj.Play);
 game.state.add('Boot', gameObj.Boot);
 game.state.add('Preloader', gameObj.Preloader);
 game.state.add('Title', gameObj.Title);
+game.state.add('Tutorial', gameObj.Tutorial);
+game.state.add('Play', gameObj.Play);
 game.state.add('GameOverScreen', gameObj.GameOverScreen);
 game.state.start('Boot');
 
 var toggleDebug = false;
 var countOfDied = 0;
+var firstPlay = true;

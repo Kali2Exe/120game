@@ -13,6 +13,15 @@ function Eraser (game, key, frame, x, y) {
     //bunch of animations
     this.eraseAnim = this.animations.add('erase', Phaser.Animation.generateFrameNames('eraserR', 2, 3, '', 1), 4, false);
     this.eraseAnim.onComplete.add(this.eraseFin, this);
+
+    //this is needed to bring eraser behind the enemy sprite.
+    this.moveDown();
+    this.moveDown();
+    this.moveDown();
+    this.moveDown();
+    this.moveDown();
+    this.moveDown();
+
 }
 
 
@@ -20,7 +29,6 @@ Eraser.prototype = Object.create(Phaser.Sprite.prototype);
 Eraser.prototype.constructor = Eraser;
 
 Eraser.prototype.update = function() {
-
 
 };
 

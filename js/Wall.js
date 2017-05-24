@@ -9,7 +9,7 @@ function Wall (game, x, y) {
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
     //set anchor/origin to middle;
-    this.anchor.set(0.5);
+    //this.anchor.set(0.5);
     this.body.setSize(2, 810, 0, 0);
     this.body.immovable = true;
 }

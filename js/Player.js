@@ -59,6 +59,7 @@ function Player(game, key, frame, key2, frame2) {
     this.paintText = "";
 
     this.leftFace = false;
+
 }
 //constructor
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -157,12 +158,12 @@ Player.prototype.update = function () {
     } else if (this.paint < 0) {
         this.paint = 0;
     }
-    if (this.useKey.isDown && this.paintMode) {
+    if (this.useKey.isDown && this.paintMode && this.paint > 0) {
         this.weapon.animations.play('paint');
     } else if (this.useKey.isDown && !this.paintMode) {
         //this.swording = true;
         //for sword mode
-        //this.weapon.animations.play('attack');
+        this.weapon.animations.play('stabbing');
     }
 
 
