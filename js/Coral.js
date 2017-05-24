@@ -25,7 +25,7 @@ function Coral (game, key, frame, x, y) {
     //more information about coral
     this.health = 100;
     this.status = 'healthy';
-    this.statColor = 'green';
+    this.statColor = 'LimeGreen';
 
     this.canHighLight = true;
 
@@ -48,14 +48,14 @@ Coral.prototype.update = function() {
     //this.healing = false;
     if (100 < this.health) {
         this.health = 100;
-    } else if (this.paint < 0) {
+    } else if (this.health < 0) {
         this.health = 0;
     }
 
     //health status's
     if (50 < this.health && this.health <= 100) {
         this.status = 'healthy';
-        this.statColor = 'green';
+        this.statColor = 'LimeGreen';
     }
     else if (25 < this.health && this.health <= 50) {
         this.status = 'warning';
