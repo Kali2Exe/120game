@@ -1,6 +1,7 @@
 // define global game container object
 var gameObj = {};
 
+
 // Boot
 //Boot loads in the atlas
 gameObj.Boot = function () {
@@ -12,6 +13,13 @@ gameObj.Boot.prototype = {
         this.stage.disableVisibilityChange = false;
     },
     preload: function () {
+
+        //CENTER THE GAME
+        //game.scale.scaleMode = Phaser.ScaleManager.NO_SCALE; //EXACT_FIT, SHOW_ALL
+        this.game.scale.pageAlignHorizontally = true;
+        this.game.scale.pageAlignVertically = true;
+        //this.game.scale.refresh();
+
         console.log('Boot: preload');
         //main use of Boot to load atlas from assets/img
         this.load.path = 'assets/img/';
@@ -52,6 +60,12 @@ gameObj.Preloader.prototype = {
         //custom load screen.  loads image1 from atlas
         //this.add.image(0,0, 'atlas', 'loadimage1');
 
+        //audio stuff
+        this.load.path = 'assets/audio/bgm/';
+        //add bgm
+        this.load.audio('bgm1', 'hawaiiansdream.mp3'); 
+        this.load.audio('bgm2', 'lastbreeze.mp3');
+        this.load.audio('bgm3', 'sease.mp3');                
         // add preloader image2 and set as preloader sprite (auto-crops sprite)
         //this.preloadBar = this.add.sprite(0, 0,'atlas', 'loadimage2');
         //this.load.setPreloadSprite(this.preloadBar);
@@ -87,6 +101,13 @@ gameObj.Title.prototype = {
     create: function () {
         console.log('Title: create');
 
+        //SOUND STUFF
+        //add bgm
+        this.bgm1Sound = game.add.audio('bgm1'); 
+
+        //play bgm
+        this.bgm1Sound.play('',0,0.1,true,false); //play(marker, position, volume, loop, forceRestart) 
+
         //add background image of moving stars
         this.background = game.add.tileSprite(0, 0, 1200, 800, 'bg');
         //this.background.scale.set(2, 2);
@@ -121,8 +142,16 @@ gameObj.Title.prototype = {
             //this.firstMusic.stop();
             if (firstPlay) {
                 this.state.start('Tutorial');
+
+            	//stop title bgm
+        		this.bgm1Sound.stop();
+
             } else {
                 this.state.start('Play');
+
+            	//stop title bgm
+        		this.bgm1Sound.stop();
+
             }
         }
         //if press 0 (zero), toggle debugs
@@ -132,6 +161,9 @@ gameObj.Title.prototype = {
 
         if(this.shiftKey.justPressed()) {
             this.state.start('Tutorial');
+            
+            //stop title bgm
+        	this.bgm1Sound.stop();
         }
 
     }
@@ -157,6 +189,7 @@ gameObj.Tutorial.prototype = {
 
     },
     create: function () {
+
         console.log('Tutorial: create');
 
         this.text = game.add.text(600, 200, 'Tutorial!!! (Placeholder)', {fontSize: '64px', fill: 'white'});
@@ -201,6 +234,13 @@ gameObj.Play.prototype = {
 
     //in create of Title, create the Title Screen with scrolling image
     create: function () {
+
+        //SOUND STUFF
+        //add bgm
+        this.bgm2Sound = game.add.audio('bgm2'); 
+
+        //play bgm
+        this.bgm2Sound.play('',0,0.1,true,false); //play(marker, position, volume, loop, forceRestart) 
 
         game.time.advancedTiming = true;
 
@@ -343,6 +383,10 @@ gameObj.Play.prototype = {
             });
             if (countOfDied === 10) {
                 this.state.start('GameOverScreen');
+
+				//stop game bgm
+        		this.bgm2Sound.stop(); 
+
             } else {
                 this.countD = 0;
                 countOfDied = 0;
@@ -487,6 +531,14 @@ gameObj.GameOverScreen.prototype = {
 
     //create() makes the GameOver screen.  Shows Game Over and options to play more or go to the title screen
     create: function () {
+
+        //SOUND STUFF
+        //add bgm
+        this.bgm3Sound = game.add.audio('bgm3'); 
+
+        //play bgm
+        this.bgm3Sound.play('',0,0.1,true,false); //play(marker, position, volume, loop, forceRestart) 
+
         //this.endGround = game.add.image(0, 0, 'atlas', 'backgroundGREY');
 
         this.background = game.add.tileSprite(0, 0, 1200, 800, 'bg');
@@ -523,9 +575,16 @@ gameObj.GameOverScreen.prototype = {
         if (this.shiftKey.justPressed()) {
             //this.deathM.stop();
             this.state.start('Title');
+
+        	//stop bgm
+        	this.bgm3Sound.stop();
+
         } else if (this.enterKey.justPressed()) {
             //this.deathM.stop();
             this.state.start('Play');
+
+            //stop bgm
+        	this.bgm3Sound.stop();
         }
     }
 
