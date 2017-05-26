@@ -1,6 +1,7 @@
 // define global game container object
 var gameObj = {};
 
+
 // Boot
 //Boot loads in the atlas
 gameObj.Boot = function () {
@@ -12,6 +13,13 @@ gameObj.Boot.prototype = {
         this.stage.disableVisibilityChange = false;
     },
     preload: function () {
+
+        //CENTER THE GAME
+        //game.scale.scaleMode = Phaser.ScaleManager.NO_SCALE; //EXACT_FIT, SHOW_ALL
+        this.game.scale.pageAlignHorizontally = true;
+        this.game.scale.pageAlignVertically = true;
+        //this.game.scale.refresh();
+
         console.log('Boot: preload');
         //main use of Boot to load atlas from assets/img
         this.load.path = 'assets/img/';
@@ -21,6 +29,8 @@ gameObj.Boot.prototype = {
         this.load.atlasJSONHash('jelly', 'jelly.png', 'jelly.json');
         this.load.atlasJSONHash('brushSon', 'brush.png', 'brush.json');
         this.load.atlasJSONHash('enemy', 'enemy.png', 'enemy.json');
+        this.load.atlasJSONHash('effects', 'effects.png', 'effects.json');
+        this.load.atlasJSONHash('bar', 'resourcebar.png', 'resourcebar.json');
         //this.load.atlasJSONHash('stab', 'stab.png', 'stab.json');
 
         this.good = true;
@@ -52,6 +62,12 @@ gameObj.Preloader.prototype = {
         //custom load screen.  loads image1 from atlas
         //this.add.image(0,0, 'atlas', 'loadimage1');
 
+        //audio stuff
+        this.load.path = 'assets/audio/bgm/';
+        //add bgm
+        this.load.audio('bgm1', 'hawaiiansdream.mp3'); 
+        this.load.audio('bgm2', 'lastbreeze.mp3');
+        this.load.audio('bgm3', 'sease.mp3');                
         // add preloader image2 and set as preloader sprite (auto-crops sprite)
         //this.preloadBar = this.add.sprite(0, 0,'atlas', 'loadimage2');
         //this.load.setPreloadSprite(this.preloadBar);
@@ -87,6 +103,13 @@ gameObj.Title.prototype = {
     create: function () {
         console.log('Title: create');
 
+        //SOUND STUFF
+        //add bgm
+        this.bgm1Sound = game.add.audio('bgm1'); 
+
+        //play bgm
+        this.bgm1Sound.play('',0,0.1,true,false); //play(marker, position, volume, loop, forceRestart) 
+
         //add background image of moving stars
         this.background = game.add.tileSprite(0, 0, 1200, 800, 'bg');
         //this.background.scale.set(2, 2);
@@ -121,8 +144,16 @@ gameObj.Title.prototype = {
             //this.firstMusic.stop();
             if (firstPlay) {
                 this.state.start('Tutorial');
+
+            	//stop title bgm
+        		this.bgm1Sound.stop();
+
             } else {
                 this.state.start('Play');
+
+            	//stop title bgm
+        		this.bgm1Sound.stop();
+
             }
         }
         //if press 0 (zero), toggle debugs
@@ -132,6 +163,9 @@ gameObj.Title.prototype = {
 
         if(this.shiftKey.justPressed()) {
             this.state.start('Tutorial');
+            
+            //stop title bgm
+        	this.bgm1Sound.stop();
         }
 
     }
@@ -157,6 +191,7 @@ gameObj.Tutorial.prototype = {
 
     },
     create: function () {
+
         console.log('Tutorial: create');
 
         this.text = game.add.text(600, 200, 'Tutorial!!! (Placeholder)', {fontSize: '64px', fill: 'white'});
@@ -202,6 +237,13 @@ gameObj.Play.prototype = {
     //in create of Title, create the Title Screen with scrolling image
     create: function () {
 
+        //SOUND STUFF
+        //add bgm
+        this.bgm2Sound = game.add.audio('bgm2'); 
+
+        //play bgm
+        this.bgm2Sound.play('',0,0.1,true,false); //play(marker, position, volume, loop, forceRestart) 
+
         game.time.advancedTiming = true;
 
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -209,6 +251,10 @@ gameObj.Play.prototype = {
         game.stage.backgroundColor = '#ccffff';
         this.tileBack = game.add.tileSprite(0, 0, 1200, 800, 'bg2');
         //coral group for adding coral pictures
+
+        //add green hover effect here.
+        this.effectGlow = new Effect(this.game, -400, -400, 'effects', 'highlight_green_1', 'green');
+
         this.coralfg = game.add.group();
         this.coralfg.enableBody = true;
 
@@ -265,6 +311,8 @@ gameObj.Play.prototype = {
             });
 
         });
+
+
         //test status text: will have to change later as part of coral
         //this.healthText.anchor.set(0.5);
 
@@ -273,7 +321,7 @@ gameObj.Play.prototype = {
         this.paintFillGroup.enableBody = true;
 
         for (var nm = 0; nm < 2; nm++) {
-            this.paintfill = new PaintFiller(this.game, 'jelly', 'jelly1', ((nm * 600) + 300), 200);
+            this.paintfill = new PaintFiller(this.game, 'jelly', 'jelly1', ((nm * 600) + 200), 200);
             //game.add.existing(this.paintfill);
             this.paintFillGroup.add(this.paintfill);
         }
@@ -299,17 +347,17 @@ gameObj.Play.prototype = {
         this.wallGroup.add(this.wall2);
 
 
-        //when player goes over section, uses image highlight
-        this.borderR = game.add.image(0, 0, 'greenB');
-        this.borderR.visible = false;
+        //heal and sparkle effects
+        this.effectHeal = new Effect(this.game, -400, -400, 'effects', 'plus1', 'heal');
+        this.effectSparkle = new Effect(this.game, -400, -400, 'effects', 'sparkles1', 'sparkle');
 
         //adding player sprite
-        this.player = new Player(this.game, 'fishy', 'fishy1', 'brushSon', 'brush_flipped');
+        this.player = new Player(this.game, 'fishy', 'fishy1', 'brushSon', 'brush_flipped', 'bar', 'bar100');
         this.player.paintText = game.add.text(this.player.x, this.player.y-25, this.player.paint, {fontSize: '32px', fill: "red"});
         //this.player.addChild(this.player.paintText);
 
 
-        this.tick = 0;
+        this.tick = 2000;
 
         //overlapping coral that will be healed
         this.affectedCoral = null;
@@ -317,22 +365,29 @@ gameObj.Play.prototype = {
         //debug toggles
         this.zeroKey = game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
 
+
+        //slow death of coral
+        this.deathTick = game.time.create();
+        this.deathTick.loop(this.tick, function() {
+            this.coralfg.forEach(function (coralA) {
+                if (coralA.canHighLight && !coralA.healing) {
+                    coralA.health--;
+                }
+                //coralA.healing = false;
+            });
+        }, this);
+
+        /*this.globalWarning = game.time.create();
+        this.globalWarning.loop(30000, function() {
+            if (this.tick > 1000) {
+                this.tick = this.tick - 250;
+            }
+        }, this);*/
+
         countOfDied = 0;
-        this.countD = 0;
-
-        //repeat event (delay, repeatCount, callback, context, arguments
-        //testing purposes only: 3000
-        //real game: 30000
-        this.player.bringToTop();
-        this.enemySpawner.start();
-
-    },
-
-    update: function () {
-
-        //change later to timer event
-        //number of dead coral check
-        if (this.countD % 120 == 0) {
+        //deathCheck, check for number of dead coral
+        this.deathCheck = game.time.create();
+        this.deathCheck.loop(2000, function() {
             this.coralfg.forEach(function (coralA) {
                 if (!coralA.canHighLight) {
                     countOfDied += 1;
@@ -343,17 +398,33 @@ gameObj.Play.prototype = {
             });
             if (countOfDied === 10) {
                 this.state.start('GameOverScreen');
+
+				//stop game bgm
+        		this.bgm2Sound.stop();
+
             } else {
-                this.countD = 0;
                 countOfDied = 0;
             }
-        }
+        }, this);
+
+        //loop event (delay, repeatCount, callback, context, arguments
+
+        this.player.bringToTop();
+        this.enemySpawner.start();
+        this.deathCheck.start();
+        this.deathTick.start();
+
+    },
+
+    update: function () {
 
         /*this.enemyGroup.forEach(function (enemyA) {
             enemyA.body.velocity.setTo(enemyA.vel, enemyA.vel);
         });*/
 
-        this.borderR.visible = false;
+        this.effectGlow.visible = false;
+        this.effectHeal.visible = false;
+        this.effectSparkle.visible = false;
 
         //overlap and collide logic (see functions)
         game.physics.arcade.overlap(this.player, this.coralfg, this.highLightBorder, null, this);
@@ -361,33 +432,17 @@ gameObj.Play.prototype = {
         game.physics.arcade.overlap(this.enemyGroup, this.coralfg, this.attackedCoral, null, this);
         game.physics.arcade.collide(this.enemyGroup, this.wallGroup, this.collideWithWall);
         game.physics.arcade.overlap(this.player.weapon, this.enemyGroup, this.attackedEnemy, null, this);
-        //change later to timer event
-        //slow tick death for coral
-        if (this.tick < game.time.now) {
-            this.coralfg.forEach(function (coralA) {
-                if (coralA.canHighLight && !coralA.healing) {
-                    coralA.health--;
-                }
-                //coralA.healing = false;
-            });
-            this.tick = game.time.now + 1000; //5000
-
-            //if player is highlighting a coral and healing it, for the system to work, this must be here
-            /*if(this.affectedCoral != null) {
-             this.affectedCoral.healing = false;
-             }*/
-        }
 
         //debug toggle
         if (this.zeroKey.justPressed()) {
             toggleDebug = !toggleDebug;
         }
 
-        this.countD += 1;
     },
 
     //if player overlap coral, highlight it
     //if player press use key and has paint, heal
+    //DO NOT TOUCH
     highLightBorder: function (player, coralPic) {
 
         //needed to fix healing:  if coral not same coral you are overlapping before, switch
@@ -400,19 +455,28 @@ gameObj.Play.prototype = {
         }
 
         if (this.affectedCoral.canHighLight) {
-            this.borderR.x = this.affectedCoral.x;
-            this.borderR.y = this.affectedCoral.y;
-            this.borderR.visible = true;
+
+            //console.log(this.effectGlow);
+            this.effectGlow.x = this.affectedCoral.x;
+            this.effectGlow.y = this.affectedCoral.y;
+            this.effectGlow.visible = true;
+            this.effectGlow.animations.play('green_glow');
         }
 
         //DO NOT TOUCH
         if (player.paintMode && player.useKey.isDown && this.affectedCoral.health > 0 && this.affectedCoral.health < 100
-                && player.paint > 0 && this.borderR.visible) {
+                && player.paint > 0 && this.effectGlow.visible) {
             //this.affectedCoral = coralPic;
             this.affectedCoral.health += 0.4;
             this.affectedCoral.healing = true;
             player.paint -= 0.1;
             console.log("painting");
+
+            this.effectHeal.x = this.affectedCoral.x;
+            this.effectHeal.y = this.affectedCoral.y;
+            this.effectHeal.visible = true;
+            this.effectHeal.animations.play('heal');
+
         } else if (!player.useKey.isDown && this.affectedCoral.health > 0 && this.affectedCoral.health <= 100) {
             this.affectedCoral.healing = false;
         }
@@ -422,6 +486,11 @@ gameObj.Play.prototype = {
     fillPaintMeter: function (player, paintJelly) {
         if (player.paint < 100) {
             player.paint += 0.8;
+            //normal paint refill is 0.8
+            this.effectSparkle.x = paintJelly.x-50;
+            this.effectSparkle.y = paintJelly.y-40;
+            this.effectSparkle.visible = true;
+            this.effectSparkle.animations.play('sparkle');
         }
     },
 
@@ -487,6 +556,14 @@ gameObj.GameOverScreen.prototype = {
 
     //create() makes the GameOver screen.  Shows Game Over and options to play more or go to the title screen
     create: function () {
+
+        //SOUND STUFF
+        //add bgm
+        this.bgm3Sound = game.add.audio('bgm3'); 
+
+        //play bgm
+        this.bgm3Sound.play('',0,0.1,true,false); //play(marker, position, volume, loop, forceRestart) 
+
         //this.endGround = game.add.image(0, 0, 'atlas', 'backgroundGREY');
 
         this.background = game.add.tileSprite(0, 0, 1200, 800, 'bg');
@@ -523,9 +600,16 @@ gameObj.GameOverScreen.prototype = {
         if (this.shiftKey.justPressed()) {
             //this.deathM.stop();
             this.state.start('Title');
+
+        	//stop bgm
+        	this.bgm3Sound.stop();
+
         } else if (this.enterKey.justPressed()) {
             //this.deathM.stop();
             this.state.start('Play');
+
+            //stop bgm
+        	this.bgm3Sound.stop();
         }
     }
 

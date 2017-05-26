@@ -19,7 +19,7 @@ function Brush (game, key, frame) {
     );*/
 
     //60, 60, 160, 25
-    this.body.setSize(70, 70, 160, 25);
+    this.body.setSize(140, 70, 80, 25);
     //bunch of animations
     this.paintAnim = this.animations.add('paint', Phaser.Animation.generateFrameNames('brush_drawing', 1, 8, '_flipped', 1), 9, false);
     this.paintAnim.onComplete.add(this.paintFin, this);
