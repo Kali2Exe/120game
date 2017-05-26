@@ -4,7 +4,7 @@
 
 //creates a Player object
 //player also needs another frame for second image
-function Player(game, key, frame, key2, frame2) {
+function Player(game, key, frame, key2, frame2, key3, frame3) {
     //new Sprite(game, x, y, key, frame)
     //random x y location and uses Player image
 
@@ -48,12 +48,13 @@ function Player(game, key, frame, key2, frame2) {
 
     this.cursors = game.input.keyboard.createCursorKeys();
     this.changeKey = game.input.keyboard.addKey(Phaser.Keyboard.C);
-
     this.useKey = game.input.keyboard.addKey(Phaser.Keyboard.X);
+
+
     this.paintMode = true;
     this.speed = 10;
-    //this.painting = false;
-    //this.swording = false;
+
+    this.bar = new ResourceBar(game, this.x, this.y-65, key3, frame3);
 
     this.paint = 100;
     this.paintText = "";
@@ -119,22 +120,31 @@ Player.prototype.update = function () {
         //this.body.acceleration.y = -8;
     }
 
+    //face logic
     if (!this.leftFace) {
         //rightface
         this.weapon.x = this.x+65;
         this.weapon.y = this.y;
 
+        this.bar.x = this.x+20;
+        this.bar.y = this.y-55;
+
         this.paintText.text = this.paint.toFixed(0);
-        this.paintText.x = this.x;
-        this.paintText.y = this.y-65;
+        this.paintText.x = this.bar.x + 80;
+        this.paintText.y = this.bar.y - 20;
+
     } else  {
         //leftface
         this.weapon.x = this.x-65;
         this.weapon.y = this.y;
 
+        this.bar.x = this.x-20;
+        this.bar.y = this.y-55;
+
         this.paintText.text = this.paint.toFixed(0);
-        this.paintText.x = this.x-40;
-        this.paintText.y = this.y-65;
+        this.paintText.x = this.bar.x + 80;
+        this.paintText.y = this.bar.y - 20;
+
     }
 
     this.body.acceleration = -50;
@@ -158,6 +168,8 @@ Player.prototype.update = function () {
     } else if (this.paint < 0) {
         this.paint = 0;
     }
+
+    //useKey logic
     if (this.useKey.isDown && this.paintMode && this.paint > 0) {
         this.weapon.animations.play('paint');
     } else if (this.useKey.isDown && !this.paintMode) {
@@ -165,6 +177,8 @@ Player.prototype.update = function () {
         //for sword mode
         this.weapon.animations.play('stabbing');
     }
+
+    this.bar.barMeterCheck(this);
 
 
     //game.physics.arcade.overlap(this, Coral, Coral.hightlightThis(), null, this);
