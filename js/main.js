@@ -54,6 +54,10 @@ gameObj.Preloader.prototype = {
 
         this.load.image('bg', 'vibrantbg.png');
         this.load.image('bg2', 'BG-4.jpg');
+        this.load.image('titlebg', 'title01.png');
+        this.load.image('titlebg2', 'title02.png');
+        //load static gameover image
+        this.load.image('gameoverbg', 'gameover.png');                
         //vibrantcoral_1
         //this.load.image('player', 'ship.png');
         //this.load.image('coral', 'teset.png');
@@ -111,18 +115,18 @@ gameObj.Title.prototype = {
         this.bgm1Sound.play('',0,0.1,true,false); //play(marker, position, volume, loop, forceRestart) 
 
         //add background image of moving stars
-        this.background = game.add.tileSprite(0, 0, 1200, 800, 'bg');
+        this.background = game.add.tileSprite(0, 0, 1200, 800, 'titlebg2');
         //this.background.scale.set(2, 2);
 
 
         //add the Title and Text instructions on how to play
-        this.text = game.add.text(600, 200, 'Day at the Bleach (prototype)', {fontSize: '64px', fill: 'red'});
+        /*this.text = game.add.text(600, 200, 'Day at the Bleach (prototype)', {fontSize: '64px', fill: 'red'});
         this.text.anchor.set(0.5);
         this.text.scale.set(0.5, 0.5);
         this.text2 = game.add.text(600, 300, 'Press ENTER to play', {fontSize: '32px', fill: 'white'});
         this.text2.anchor.set(0.5);
         this.text3 = game.add.text(600, 400, 'Press SHIFT to see tutorial', {fontSize: '32px', fill: 'white'});
-        this.text3.anchor.set(0.5);
+        this.text3.anchor.set(0.5);*/
 
 
         //this.text6 = game.add.text(600, 20, 'Press 0 to toggle \ndebug/collision circles', {fontSize: '16px', fill: 'Red'});
@@ -307,7 +311,7 @@ gameObj.Play.prototype = {
             coralA.statusText.anchor.set(0.5);
             coralA.healthText = game.add.text(coralA.x, coralA.y, coralA.health, {
                 fontSize: '32px',
-                fill: coralA.statColor
+                fill: coralA.statColor// adding stroke to the number makes the game drop a ton of fps , stroke: "white", strokeThickness: "5"
             });
 
         });
@@ -321,7 +325,7 @@ gameObj.Play.prototype = {
         this.paintFillGroup.enableBody = true;
 
         for (var nm = 0; nm < 2; nm++) {
-            this.paintfill = new PaintFiller(this.game, 'jelly', 'jelly1', ((nm * 600) + 200), 200);
+            this.paintfill = new PaintFiller(this.game, 'jelly', 'jelly1', ((nm * 600) + 200), 100);
             //game.add.existing(this.paintfill);
             this.paintFillGroup.add(this.paintfill);
         }
@@ -353,7 +357,7 @@ gameObj.Play.prototype = {
 
         //adding player sprite
         this.player = new Player(this.game, 'fishy', 'fishy1', 'brushSon', 'brush_flipped', 'bar', 'bar100');
-        this.player.paintText = game.add.text(this.player.x, this.player.y-25, this.player.paint, {fontSize: '32px', fill: "red"});
+        this.player.paintText = game.add.text(this.player.x, this.player.y-25, this.player.paint, {fontSize: '30px', fill: "red", stroke: "white", strokeThickness: "5"});
         //this.player.addChild(this.player.paintText);
 
 
@@ -566,9 +570,9 @@ gameObj.GameOverScreen.prototype = {
 
         //this.endGround = game.add.image(0, 0, 'atlas', 'backgroundGREY');
 
-        this.background = game.add.tileSprite(0, 0, 1200, 800, 'bg');
+        this.background = game.add.tileSprite(0, 0, 1200, 800, 'gameoverbg');
         //Text that shows game over and key presses to go back to a screen or replay
-        this.gameOverText = game.add.text(600, 250, 'Game Over', {fontSize: '64px', fill: 'red'});
+        /*this.gameOverText = game.add.text(600, 250, 'Game Over', {fontSize: '64px', fill: 'red'});
         this.gameOverText.anchor.set(0.5);
         //this.gameOverText.scale.set(0.5, 0.5);
 
@@ -579,7 +583,7 @@ gameObj.GameOverScreen.prototype = {
         this.exitT1.anchor.set(0.5);
         this.exitT2 = game.add.text(600, 475, 'Press Enter to Replay', {fontSize: '64px', fill: 'red'});
         this.exitT2.anchor.set(0.5);
-
+		*/
 
 
         //Press keys to go back to title or replay
