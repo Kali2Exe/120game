@@ -16,6 +16,12 @@ function Player(game, key, frame, key2, frame2, key3, frame3) {
     Phaser.Sprite.call(this, game, 600, 400, key, frame);
     game.add.existing(this);
 
+    //add sfx
+    this.swish1Sfx = game.add.audio('swish1');
+    this.swish2Sfx = game.add.audio('swish2');
+    this.heal1Sfx = game.add.audio('heal1');
+
+
     //this.addChild(this.weapon);
 
     //set anchor/origin to middle
@@ -153,6 +159,11 @@ Player.prototype.update = function () {
     if (this.changeKey.justPressed()) {
         //change sprites
         //false = sword mode
+
+        //sfx on C press
+        this.swish1Sfx.play('',0,1,false,true);
+
+
         if (this.paintMode) {
             this.weapon.animations.play('brushToPen');
             this.paintMode = false;
@@ -171,10 +182,18 @@ Player.prototype.update = function () {
 
     //useKey logic
     if (this.useKey.isDown && this.paintMode && this.paint > 0) {
+
+        //sfx for painting
+        this.heal1Sfx.play('',0,0.4,false,false);
+
         this.weapon.animations.play('paint');
     } else if (this.useKey.isDown && !this.paintMode) {
         //this.swording = true;
         //for sword mode
+
+        //sfx for stabbing
+        this.swish2Sfx.play('',0,1,false,false);
+
         this.weapon.animations.play('stabbing');
     }
 
