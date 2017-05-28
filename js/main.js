@@ -17,7 +17,7 @@ gameObj.Boot.prototype = {
         //CENTER THE GAME
         //game.scale.scaleMode = Phaser.ScaleManager.NO_SCALE; //EXACT_FIT, SHOW_ALL
         this.game.scale.pageAlignHorizontally = true;
-        this.game.scale.pageAlignVertically = true;
+        //this.game.scale.pageAlignVertically = true;
         //this.game.scale.refresh();
 
         console.log('Boot: preload');
