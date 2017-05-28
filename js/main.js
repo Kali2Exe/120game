@@ -76,6 +76,20 @@ gameObj.Preloader.prototype = {
         //this.preloadBar = this.add.sprite(0, 0,'atlas', 'loadimage2');
         //this.load.setPreloadSprite(this.preloadBar);
 
+        //sfx stuff
+        this.load.path = 'assets/audio/sfx/';
+        //add sfx
+
+        this.load.audio('magical1', 'magical1.wav');
+        //this.load.audio('sparkle', 'sparkle.ogg');
+        this.load.audio('swish1', 'swish1.wav');
+        this.load.audio('swish2', 'swish2.wav');
+        this.load.audio('heal1', 'heal1.wav');
+        this.load.audio('drink', 'drink.wav');
+
+
+
+
     },
     create: function () {
         console.log('Preloader: create');
@@ -110,6 +124,11 @@ gameObj.Title.prototype = {
         //SOUND STUFF
         //add bgm
         this.bgm1Sound = game.add.audio('bgm1'); 
+
+        //add sfx
+        this.magical1Sfx = game.add.audio('magical1');
+        this.sparkle1Sfx = game.add.audio('sparkle');
+
 
         //play bgm
         this.bgm1Sound.play('',0,0.1,true,false); //play(marker, position, volume, loop, forceRestart) 
@@ -146,6 +165,9 @@ gameObj.Title.prototype = {
         //if you press Enter, you go to Play screen
         if (this.enterKey.justPressed()) {
             //this.firstMusic.stop();
+
+            //play sfx on enter key
+            this.magical1Sfx.play('',0,1,false,true);
             if (firstPlay) {
                 this.state.start('Tutorial');
 
@@ -166,6 +188,8 @@ gameObj.Title.prototype = {
         }
 
         if(this.shiftKey.justPressed()) {
+            this.magical1Sfx.play('',0,1,false,true);
+
             this.state.start('Tutorial');
             
             //stop title bgm
@@ -244,6 +268,11 @@ gameObj.Play.prototype = {
         //SOUND STUFF
         //add bgm
         this.bgm2Sound = game.add.audio('bgm2'); 
+
+        //add sfx
+        this.drinkSfx = game.add.audio('drink'); 
+
+
 
         //play bgm
         this.bgm2Sound.play('',0,0.1,true,false); //play(marker, position, volume, loop, forceRestart) 
@@ -495,6 +524,10 @@ gameObj.Play.prototype = {
             this.effectSparkle.y = paintJelly.y-40;
             this.effectSparkle.visible = true;
             this.effectSparkle.animations.play('sparkle');
+
+            //play refill sfx
+            this.drinkSfx.play('',0,1,false,true); //play(marker, position, volume, loop, forceRestart) 
+
         }
     },
 
