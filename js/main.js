@@ -54,8 +54,8 @@ gameObj.Preloader.prototype = {
 
         this.load.image('bg', 'vibrantbg.png');
         this.load.image('bg2', 'BG-4.jpg');
-        this.load.image('titlebg', 'title01.png');
-        this.load.image('titlebg2', 'title02.png');
+        this.load.image('tutorialbg', 'tutorial02.png');
+        this.load.image('titlebg', 'title.png');
         //load static gameover image
         this.load.image('gameoverbg', 'gameover.png');                
         //vibrantcoral_1
@@ -133,8 +133,8 @@ gameObj.Title.prototype = {
         //play bgm
         this.bgm1Sound.play('',0,0.1,true,false); //play(marker, position, volume, loop, forceRestart) 
 
-        //add background image of moving stars
-        this.background = game.add.tileSprite(0, 0, 1200, 800, 'titlebg2');
+        //add background image for title screen
+        this.background = game.add.tileSprite(0, 0, 1200, 800, 'titlebg');
         //this.background.scale.set(2, 2);
 
 
@@ -221,12 +221,14 @@ gameObj.Tutorial.prototype = {
     create: function () {
 
         console.log('Tutorial: create');
-
+	
+	/*
         this.text = game.add.text(600, 200, 'Tutorial!!! (Placeholder)', {fontSize: '64px', fill: 'white'});
         this.text.anchor.set(0.5);
-
-        //placeholder image for tutorial screen
-        //this.tutorialText = game.add.image(400, 150, 'atlas', 'gameOver');
+	*/
+	    
+        //add background image of tutorial screen
+        this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorialbg');
 
         this.enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
         this.zeroKey = game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
