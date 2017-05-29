@@ -54,7 +54,7 @@ gameObj.Preloader.prototype = {
 
         this.load.image('bg', 'vibrantbg.png');
         this.load.image('bg2', 'BG-4.jpg');
-        this.load.image('tutorialbg', 'tutorial02.png');
+        this.load.image('tutorialbg', 'tutorial.png');
         this.load.image('titlebg', 'title.png');
         //load static gameover image
         this.load.image('gameoverbg', 'gameover.png');                
@@ -171,14 +171,14 @@ gameObj.Title.prototype = {
             if (firstPlay) {
                 this.state.start('Tutorial');
 
-            	//stop title bgm
-        		this.bgm1Sound.stop();
+                //stop title bgm
+                this.bgm1Sound.stop();
 
             } else {
                 this.state.start('Play');
 
-            	//stop title bgm
-        		this.bgm1Sound.stop();
+                //stop title bgm
+                this.bgm1Sound.stop();
 
             }
         }
@@ -193,7 +193,7 @@ gameObj.Title.prototype = {
             this.state.start('Tutorial');
             
             //stop title bgm
-        	this.bgm1Sound.stop();
+            this.bgm1Sound.stop();
         }
 
     }
@@ -203,7 +203,7 @@ gameObj.Title.prototype = {
 
      //plays music
      this.firstMusic = this.add.audio('firstMusic');
-     this.firstMusic.play('', 0, 0.75, true);	// ('marker', start position, volume (0-1), loop)
+     this.firstMusic.play('', 0, 0.75, true);   // ('marker', start position, volume (0-1), loop)
 
      }*/
 
@@ -221,18 +221,19 @@ gameObj.Tutorial.prototype = {
     create: function () {
 
         console.log('Tutorial: create');
-	
-	/*
+    
+    /*
         this.text = game.add.text(600, 200, 'Tutorial!!! (Placeholder)', {fontSize: '64px', fill: 'white'});
         this.text.anchor.set(0.5);
-	*/
-	    
+    */
+        
         //add background image of tutorial screen
         this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorialbg');
 
         this.enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
         this.zeroKey = game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
         this.shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
+        this.player = new Player(this.game, 'fishy', 'fishy1', 'brushSon', 'brush_flipped');
     },
     update: function () {
         //if you press Enter, you go to Play screen
@@ -434,8 +435,8 @@ gameObj.Play.prototype = {
             if (countOfDied === 10) {
                 this.state.start('GameOverScreen');
 
-				//stop game bgm
-        		this.bgm2Sound.stop();
+                //stop game bgm
+                this.bgm2Sound.stop();
 
             } else {
                 countOfDied = 0;
@@ -618,7 +619,7 @@ gameObj.GameOverScreen.prototype = {
         this.exitT1.anchor.set(0.5);
         this.exitT2 = game.add.text(600, 475, 'Press Enter to Replay', {fontSize: '64px', fill: 'red'});
         this.exitT2.anchor.set(0.5);
-		*/
+        */
 
 
         //Press keys to go back to title or replay
@@ -627,7 +628,7 @@ gameObj.GameOverScreen.prototype = {
 
         //game over sound
         //this.deathM = this.add.audio('gameOverSound');
-        //this.deathM.play('', 0, 1, false);	// ('marker', start position, volume (0-1), loop)
+        //this.deathM.play('', 0, 1, false);    // ('marker', start position, volume (0-1), loop)
     },
 
     update: function () {
@@ -640,15 +641,15 @@ gameObj.GameOverScreen.prototype = {
             //this.deathM.stop();
             this.state.start('Title');
 
-        	//stop bgm
-        	this.bgm3Sound.stop();
+            //stop bgm
+            this.bgm3Sound.stop();
 
         } else if (this.enterKey.justPressed()) {
             //this.deathM.stop();
             this.state.start('Play');
 
             //stop bgm
-        	this.bgm3Sound.stop();
+            this.bgm3Sound.stop();
         }
     }
 
