@@ -20,6 +20,10 @@ function Effect (game, x, y, key, frame, word) {
         this.animations.add('heal', Phaser.Animation.generateFrameNames('plus', 1, 9, '', 1), 7, false);
     } else if (word === 'sparkle') {
         this.animations.add('sparkle', Phaser.Animation.generateFrameNames('sparkles', 1, 7, '', 1), 7, false);
+    } else if (word === 'slash') {
+        this.animations.add('slash', Phaser.Animation.generateFrameNames('slash', 1, 4, '', 1), 7, false);
+    } else if (word === 'bubbles') {
+        this.animations.add('bubbles', Phaser.Animation.generateFrameNames('bubbles', 1, 6, '', 1), 7, false);
     }
     
 }
