@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=VT323');
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
+
+
+body {
+	text-align: center; 
+	}
+
+.gametext {
+	margin: 20px;
+	top: 900px;
+	position: absolute;
+	font-size: 32px;
+	text-align: center;
+	right: 30%;
+	}

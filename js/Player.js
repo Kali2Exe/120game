@@ -4,7 +4,7 @@
 
 //creates a Player object
 //player also needs another frame for second image
-function Player(game, key, frame, key2, frame2) {
+function Player(game, key, frame, key2, frame2, key3, frame3) {
     //new Sprite(game, x, y, key, frame)
     //random x y location and uses Player image
 
@@ -15,6 +15,12 @@ function Player(game, key, frame, key2, frame2) {
 
     Phaser.Sprite.call(this, game, 600, 400, key, frame);
     game.add.existing(this);
+
+    //add sfx
+    this.swish1Sfx = game.add.audio('swish1');
+    this.swish2Sfx = game.add.audio('swish2');
+    this.heal1Sfx = game.add.audio('heal1');
+
 
     //this.addChild(this.weapon);
 
@@ -48,12 +54,13 @@ function Player(game, key, frame, key2, frame2) {
 
     this.cursors = game.input.keyboard.createCursorKeys();
     this.changeKey = game.input.keyboard.addKey(Phaser.Keyboard.C);
-
     this.useKey = game.input.keyboard.addKey(Phaser.Keyboard.X);
+
+
     this.paintMode = true;
     this.speed = 10;
-    //this.painting = false;
-    //this.swording = false;
+
+    this.bar = new ResourceBar(game, this.x, this.y-65, key3, frame3);
 
     this.paint = 100;
     this.paintText = "";
@@ -84,7 +91,7 @@ Player.prototype.update = function () {
     //movement controls
     if (this.cursors.left.isDown) {
         //this.x -= this.speed;
-        this.body.velocity.x = -200;
+        this.body.velocity.x = -225;
         //this.body.acceleration.x = -8;
         this.scale.x = -1;
 
@@ -96,7 +103,7 @@ Player.prototype.update = function () {
     } else if (this.cursors.right.isDown) {
         //If press right, go right
         //this.x += this.speed;
-        this.body.velocity.x = 200;
+        this.body.velocity.x = 225;
         //this.body.acceleration.x = 8;
         this.scale.x = 1;
 
@@ -109,40 +116,54 @@ Player.prototype.update = function () {
     if (this.cursors.down.isDown) {
         //If press down, move down
         //this.y += this.speed;
-        this.body.velocity.y = 200;
+        this.body.velocity.y = 225;
         //this.body.acceleration.y = 8;
 
     } else if (this.cursors.up.isDown) {
         //If press up, go up
         //this.y -= this.speed;
-        this.body.velocity.y = -200;
+        this.body.velocity.y = -225;
         //this.body.acceleration.y = -8;
     }
 
+    //face logic
     if (!this.leftFace) {
         //rightface
         this.weapon.x = this.x+65;
         this.weapon.y = this.y;
 
+        this.bar.x = this.x+20;
+        this.bar.y = this.y-55;
+
         this.paintText.text = this.paint.toFixed(0);
-        this.paintText.x = this.x;
-        this.paintText.y = this.y-65;
+        this.paintText.x = this.bar.x + 80;
+        this.paintText.y = this.bar.y - 20;
+
     } else  {
         //leftface
         this.weapon.x = this.x-65;
         this.weapon.y = this.y;
 
+        this.bar.x = this.x-20;
+        this.bar.y = this.y-55;
+
         this.paintText.text = this.paint.toFixed(0);
-        this.paintText.x = this.x-40;
-        this.paintText.y = this.y-65;
+        this.paintText.x = this.bar.x + 80;
+        this.paintText.y = this.bar.y - 20;
+
     }
 
-    this.body.acceleration = -50;
+    this.body.acceleration = -40;
 
     //change key control
     if (this.changeKey.justPressed()) {
         //change sprites
         //false = sword mode
+
+        //sfx on C press
+        this.swish1Sfx.play('',0,1,false,true);
+
+
         if (this.paintMode) {
             this.weapon.animations.play('brushToPen');
             this.paintMode = false;
@@ -158,13 +179,25 @@ Player.prototype.update = function () {
     } else if (this.paint < 0) {
         this.paint = 0;
     }
-    if (this.useKey.isDown && this.paintMode) {
+
+    //useKey logic
+    if (this.useKey.isDown && this.paintMode && this.paint > 0) {
+
+        //sfx for painting
+        this.heal1Sfx.play('',0,0.4,false,false);
+
         this.weapon.animations.play('paint');
     } else if (this.useKey.isDown && !this.paintMode) {
         //this.swording = true;
         //for sword mode
+
+        //sfx for stabbing
+        this.swish2Sfx.play('',0,1,false,false);
+
         this.weapon.animations.play('stabbing');
     }
+
+    this.bar.barMeterCheck(this);
 
 
     //game.physics.arcade.overlap(this, Coral, Coral.hightlightThis(), null, this);
