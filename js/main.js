@@ -397,7 +397,7 @@ gameObj.Play.prototype = {
         this.enemyGroup.enableBody = true;
 
         this.enemySpawner = game.time.create();
-        this.enemySpawner.loop(1500, function() {
+        this.enemySpawner.loop(15000, function() {
             this.enemyFish = new Enemy(game, 'enemy', 'enemyR1', 'enemy', 'eraserR1');
             this.enemyGroup.add(this.enemyFish);
         }, this);
