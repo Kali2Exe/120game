@@ -30,6 +30,8 @@ gameObj.Boot.prototype = {
         this.load.atlasJSONHash('brushSon', 'brush.png', 'brush.json');
         this.load.atlasJSONHash('enemy', 'enemy.png', 'enemy.json');
         this.load.atlasJSONHash('effects', 'effects.png', 'effects.json');
+        this.load.atlasJSONHash('slash', 'slash.png', 'slash.json');
+        this.load.atlasJSONHash('bubbles', 'bubbles.png', 'bubbles.json');        
         this.load.atlasJSONHash('bar', 'resourcebar.png', 'resourcebar.json');
         //this.load.atlasJSONHash('stab', 'stab.png', 'stab.json');
 
@@ -37,6 +39,7 @@ gameObj.Boot.prototype = {
 
     },
     create: function () {
+
         //go to Preloader state after Boot.preload is done
         if (this.good) {
             this.state.start('Preloader');
@@ -71,7 +74,8 @@ gameObj.Preloader.prototype = {
         //add bgm
         this.load.audio('bgm1', 'hawaiiansdream.mp3'); 
         this.load.audio('bgm2', 'lastbreeze.mp3');
-        this.load.audio('bgm3', 'sease.mp3');                
+        this.load.audio('bgm3', 'sease.mp3');
+        this.load.audio('bgm4', 'rideon.mp3');                        
         // add preloader image2 and set as preloader sprite (auto-crops sprite)
         //this.preloadBar = this.add.sprite(0, 0,'atlas', 'loadimage2');
         //this.load.setPreloadSprite(this.preloadBar);
@@ -80,6 +84,8 @@ gameObj.Preloader.prototype = {
         this.load.path = 'assets/audio/sfx/';
         //add sfx
 
+        this.load.audio('splat', 'impactsplat02.wav');
+        this.load.audio('bub', 'impactsplat07.wav');
         this.load.audio('magical1', 'magical1.wav');
         //this.load.audio('sparkle', 'sparkle.ogg');
         this.load.audio('swish1', 'swish1.wav');
@@ -93,6 +99,7 @@ gameObj.Preloader.prototype = {
     },
     create: function () {
         console.log('Preloader: create');
+
         // disable preload bar crop while we wait for mp3 decoding
         //this.preloadBar.cropEnabled = false;
     },
@@ -120,6 +127,9 @@ gameObj.Title.prototype = {
     //in create of Title, create the Title Screen with scrolling image
     create: function () {
         console.log('Title: create');
+
+        //black fade thingy
+        this.camera.flash('#000000');
 
         //SOUND STUFF
         //add bgm
@@ -221,7 +231,17 @@ gameObj.Tutorial.prototype = {
     create: function () {
 
         console.log('Tutorial: create');
-    
+
+        //black fade thingy
+        this.camera.flash('#000000');
+
+        //SOUND STUFF
+        //add bgm
+        this.bgm4Sound = game.add.audio('bgm4'); 
+
+        //play bgm
+        this.bgm4Sound.play('',0,0.1,true,false); //play(marker, position, volume, loop, forceRestart)  
+
     /*
         this.text = game.add.text(600, 200, 'Tutorial!!! (Placeholder)', {fontSize: '64px', fill: 'white'});
         this.text.anchor.set(0.5);
@@ -238,9 +258,12 @@ gameObj.Tutorial.prototype = {
     update: function () {
         //if you press Enter, you go to Play screen
         if (this.enterKey.justPressed()) {
-            //this.firstMusic.stop();
             this.state.start('Play');
+
+            //stop bgm
+            this.bgm4Sound.stop();
         }
+
         //if press 0 (zero), toggle debugs
         if (this.zeroKey.justPressed()) {
             toggleDebug = !toggleDebug;
@@ -248,11 +271,13 @@ gameObj.Tutorial.prototype = {
 
         if(this.shiftKey.justPressed()) {
             this.state.start('Title');
+
+            //stop bgm
+            this.bgm4Sound.stop();
         }
 
     }
 };
-
 
 //Play Screen
 gameObj.Play = function () {
@@ -268,14 +293,17 @@ gameObj.Play.prototype = {
     //in create of Title, create the Title Screen with scrolling image
     create: function () {
 
+        //added quick black fade-in
+        this.camera.flash('#000000');
+
         //SOUND STUFF
         //add bgm
         this.bgm2Sound = game.add.audio('bgm2'); 
 
         //add sfx
         this.drinkSfx = game.add.audio('drink'); 
-
-
+        this.splatSfx = game.add.audio('splat'); 
+        this.bubSfx = game.add.audio('bub'); 
 
         //play bgm
         this.bgm2Sound.play('',0,0.1,true,false); //play(marker, position, volume, loop, forceRestart) 
@@ -369,7 +397,7 @@ gameObj.Play.prototype = {
         this.enemyGroup.enableBody = true;
 
         this.enemySpawner = game.time.create();
-        this.enemySpawner.loop(15000, function() {
+        this.enemySpawner.loop(1500, function() {
             this.enemyFish = new Enemy(game, 'enemy', 'enemyR1', 'enemy', 'eraserR1');
             this.enemyGroup.add(this.enemyFish);
         }, this);
@@ -386,6 +414,11 @@ gameObj.Play.prototype = {
         //heal and sparkle effects
         this.effectHeal = new Effect(this.game, -400, -400, 'effects', 'plus1', 'heal');
         this.effectSparkle = new Effect(this.game, -400, -400, 'effects', 'sparkles1', 'sparkle');
+
+        //enemy effects
+        this.effectSlash = new Effect(this.game, -400, -400, 'slash', 'slash', 'slash');
+        this.effectBubbles = new Effect(this.game, -400, -400, 'bubbles', 'bubbles', 'bubbles');        
+
 
         //adding player sprite
         this.player = new Player(this.game, 'fishy', 'fishy1', 'brushSon', 'brush_flipped', 'bar', 'bar100');
@@ -461,6 +494,9 @@ gameObj.Play.prototype = {
         this.effectGlow.visible = false;
         this.effectHeal.visible = false;
         this.effectSparkle.visible = false;
+
+        this.effectSlash.visible = false;
+        this.effectBubbles.visible = false;
 
         //overlap and collide logic (see functions)
         game.physics.arcade.overlap(this.player, this.coralfg, this.highLightBorder, null, this);
@@ -547,8 +583,16 @@ gameObj.Play.prototype = {
     attackedEnemy: function(weapon, enemy) {
 
         if (!this.player.paintMode && this.player.useKey.isDown) {
+            this.effectSlash.x = enemy.x-65;
+            this.effectSlash.y = enemy.y-40;
+            this.effectSlash.visible = true;
+            this.effectSlash.animations.play('slash');
             enemy.health--;
+
+            //play refill sfx
+            this.splatSfx.play('',.3,0.2,false,false); //play(marker, position, volume, loop, forceRestart) 
         }
+        
     },
 
     //if collide with wall, enemy turns left or right
@@ -596,6 +640,9 @@ gameObj.GameOverScreen.prototype = {
 
     //create() makes the GameOver screen.  Shows Game Over and options to play more or go to the title screen
     create: function () {
+
+        //added quick black fade-in
+        this.camera.flash('#000000');
 
         //SOUND STUFF
         //add bgm
