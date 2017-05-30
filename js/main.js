@@ -57,8 +57,8 @@ gameObj.Preloader.prototype = {
 
         this.load.image('bg', 'vibrantbg.png');
         this.load.image('bg2', 'BG-4.jpg');
-        this.load.image('tutorialbg', 'tutorial.png');
-        this.load.image('titlebg', 'title.png');
+        this.load.image('tutorialbg', 'tutorialV2.png');
+        this.load.image('titlebg', 'TitleV2.jpg');
         //load static gameover image
         this.load.image('gameoverbg', 'gameover.png');                
         //vibrantcoral_1
@@ -141,22 +141,11 @@ gameObj.Title.prototype = {
 
 
         //play bgm
-        this.bgm1Sound.play('',0,0.1,true,false); //play(marker, position, volume, loop, forceRestart) 
+        this.bgm1Sound.play('',0,0.7,true,false); //play(marker, position, volume, loop, forceRestart)
 
         //add background image for title screen
         this.background = game.add.tileSprite(0, 0, 1200, 800, 'titlebg');
         //this.background.scale.set(2, 2);
-
-
-        //add the Title and Text instructions on how to play
-        /*this.text = game.add.text(600, 200, 'Day at the Bleach (prototype)', {fontSize: '64px', fill: 'red'});
-        this.text.anchor.set(0.5);
-        this.text.scale.set(0.5, 0.5);
-        this.text2 = game.add.text(600, 300, 'Press ENTER to play', {fontSize: '32px', fill: 'white'});
-        this.text2.anchor.set(0.5);
-        this.text3 = game.add.text(600, 400, 'Press SHIFT to see tutorial', {fontSize: '32px', fill: 'white'});
-        this.text3.anchor.set(0.5);*/
-
 
         //this.text6 = game.add.text(600, 20, 'Press 0 to toggle \ndebug/collision circles', {fontSize: '16px', fill: 'Red'});
 
@@ -240,7 +229,7 @@ gameObj.Tutorial.prototype = {
         this.bgm4Sound = game.add.audio('bgm4'); 
 
         //play bgm
-        this.bgm4Sound.play('',0,0.1,true,false); //play(marker, position, volume, loop, forceRestart)  
+        this.bgm4Sound.play('',0,0.5,true,false); //play(marker, position, volume, loop, forceRestart)
 
     /*
         this.text = game.add.text(600, 200, 'Tutorial!!! (Placeholder)', {fontSize: '64px', fill: 'white'});
@@ -306,7 +295,7 @@ gameObj.Play.prototype = {
         this.bubSfx = game.add.audio('bub'); 
 
         //play bgm
-        this.bgm2Sound.play('',0,0.1,true,false); //play(marker, position, volume, loop, forceRestart) 
+        this.bgm2Sound.play('',0,0.5,true,false); //play(marker, position, volume, loop, forceRestart)
 
         game.time.advancedTiming = true;
 
@@ -331,7 +320,7 @@ gameObj.Play.prototype = {
         for (var i = 0; i < 6; i++) {
             this.count++;
             if (this.count < 10) {
-                if (i < 2 || 3 < i) {
+                if (i < 1 || 4 < i) {
                     this.dedCoral = game.add.image(i*200, 400, 'dead', 'dedcoral_0'+ this.count);
                     game.add.existing(this.dedCoral);
                     this.coralded.add(this.dedCoral);
@@ -366,12 +355,16 @@ gameObj.Play.prototype = {
         this.coralfg.forEach(function (coralA) {
             coralA.statusText = game.add.text(coralA.x + 100, coralA.y + 100, coralA.status, {
                 fontSize: '32px',
-                fill: coralA.statColor
+                fill: coralA.statColor,
+                stroke: "white",
+                strokeThickness: 3
             });
             coralA.statusText.anchor.set(0.5);
             coralA.healthText = game.add.text(coralA.x, coralA.y, coralA.health, {
                 fontSize: '32px',
-                fill: coralA.statColor// adding stroke to the number makes the game drop a ton of fps , stroke: "white", strokeThickness: "5"
+                fill: coralA.statColor,
+                stroke: "white",
+                strokeThickness: 3// adding stroke to the number makes the game drop a ton of fps , stroke: "white", strokeThickness: "5"
             });
 
         });
@@ -416,23 +409,25 @@ gameObj.Play.prototype = {
         this.effectSparkle = new Effect(this.game, -400, -400, 'effects', 'sparkles1', 'sparkle');
 
         //enemy effects
-        this.effectSlash = new Effect(this.game, -400, -400, 'slash', 'slash', 'slash');
-        this.effectBubbles = new Effect(this.game, -400, -400, 'bubbles', 'bubbles', 'bubbles');        
-
+        this.effectSlash = new Effect(this.game, -400, -400, 'slash', 'slash1', 'slash');
+        this.effectBubbles = new Effect(this.game, -400, -400, 'bubbles', 'bubbles1', 'bubbles');
 
         //adding player sprite
         this.player = new Player(this.game, 'fishy', 'fishy1', 'brushSon', 'brush_flipped', 'bar', 'bar100');
-        this.player.paintText = game.add.text(this.player.x, this.player.y-25, this.player.paint, {fontSize: '30px', fill: "red", stroke: "white", strokeThickness: "5"});
+        this.player.paintText = game.add.text(this.player.x, this.player.y-25, this.player.paint,
+            {fontSize: '30px', fill: "red", stroke: "white", strokeThickness: "3"});
         //this.player.addChild(this.player.paintText);
 
 
-        this.tick = 2000;
+        this.tick = 500;
 
         //overlapping coral that will be healed
         this.affectedCoral = null;
 
         //debug toggles
         this.zeroKey = game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
+
+        this.aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
 
 
         //slow death of coral
@@ -465,7 +460,7 @@ gameObj.Play.prototype = {
                 }
                 //coralA.healing = false;
             });
-            if (countOfDied === 10) {
+            if (countOfDied === 8) {
                 this.state.start('GameOverScreen');
 
                 //stop game bgm
@@ -508,6 +503,14 @@ gameObj.Play.prototype = {
         //debug toggle
         if (this.zeroKey.justPressed()) {
             toggleDebug = !toggleDebug;
+        }
+
+        //toggle display of status and health
+        if (this.aKey.justPressed()) {
+            this.coralfg.forEach(function (coralB) {
+                coralB.statusText.visible = !coralB.statusText.visible;
+                coralB.healthText.visible = !coralB.healthText.visible;
+            });
         }
 
     },
@@ -577,6 +580,7 @@ gameObj.Play.prototype = {
         if (coral.health > 0) {
             coral.health = coral.health -0.02;
         }
+
     },
 
     //if attacking enemy in pen mode, decrease enemy health
@@ -591,6 +595,23 @@ gameObj.Play.prototype = {
 
             //play refill sfx
             this.splatSfx.play('',.3,0.2,false,false); //play(marker, position, volume, loop, forceRestart) 
+        }
+
+        //body touching
+        //if health is <= 0, kill and remove from group
+        if (enemy.health <= 0) {
+            this.effectBubbles.x = enemy.x-65;
+            this.effectBubbles.y = enemy.y-40;
+            this.effectBubbles.visible = true;
+            this.effectBubbles.animations.play('bubbles');
+
+            this.bubSfx.play('', 0, 0.5, false, false);
+            enemy.kill();
+            enemy.eraser.kill();
+
+            enemy.destroy();
+            enemy.eraser.destroy();
+
         }
         
     },
@@ -703,7 +724,7 @@ gameObj.GameOverScreen.prototype = {
 };
 
 // init game
-var game = new Phaser.Game(1200, 800, Phaser.AUTO);
+var game = new Phaser.Game(1200, 800, Phaser.AUTO, 'gamecanvas');
 game.state.add('Boot', gameObj.Boot);
 game.state.add('Preloader', gameObj.Preloader);
 game.state.add('Title', gameObj.Title);
