@@ -17,10 +17,6 @@ function Eraser (game, key, frame, x, y) {
     //this is needed to bring eraser behind the enemy sprite.
     this.moveDown();
     this.moveDown();
-    this.moveDown();
-    this.moveDown();
-    this.moveDown();
-    this.moveDown();
 
 }
 

@@ -95,16 +95,6 @@ Enemy.prototype.update = function() {
         this.eraser.y = this.y + 32;
     }
 
-    //body touching
-    //if health is <= 0, kill and remove from group
-    if (this.health <= 0) {
-        this.kill();
-        this.eraser.kill();
-
-        this.destroy();
-        this.eraser.destroy();
-
-    }
 
 };
 
