@@ -31,7 +31,7 @@ gameObj.Boot.prototype = {
         this.load.atlasJSONHash('enemy', 'enemy.png', 'enemy.json');
         this.load.atlasJSONHash('effects', 'effects.png', 'effects.json');
         this.load.atlasJSONHash('slash', 'slash.png', 'slash.json');
-        this.load.atlasJSONHash('bubbles', 'bubbles.png', 'bubbles.json');        
+        this.load.atlasJSONHash('bubbles', 'bubblesV2.png', 'bubbles.json');        
         this.load.atlasJSONHash('bar', 'resourcebar.png', 'resourcebar.json');
         //this.load.atlasJSONHash('stab', 'stab.png', 'stab.json');
 
@@ -419,7 +419,7 @@ gameObj.Play.prototype = {
         //this.player.addChild(this.player.paintText);
 
 
-        this.tick = 500;
+        this.tick = 1000;
 
         //overlapping coral that will be healed
         this.affectedCoral = null;
@@ -600,12 +600,17 @@ gameObj.Play.prototype = {
         //body touching
         //if health is <= 0, kill and remove from group
         if (enemy.health <= 0) {
-            this.effectBubbles.x = enemy.x-65;
-            this.effectBubbles.y = enemy.y-40;
-            this.effectBubbles.visible = true;
-            this.effectBubbles.animations.play('bubbles');
+            //this.effectBubbles.x = enemy.x-65;
+            //this.effectBubbles.y = enemy.y-40;
+            //this.effectBubbles.visible = true;
+            //this.effectBubbles.animations.play('bubbles');
+
+            bubblez = this.game.add.sprite(enemy.body.x-65,enemy.body.y-65,'bubbles');
+            bubblez.animations.add ('bubbles',[1,6,2],2,true)
+            bubblez.animations.play('bubbles',5,false,true);
 
             this.bubSfx.play('', 0, 0.5, false, false);
+
             enemy.kill();
             enemy.eraser.kill();
 
