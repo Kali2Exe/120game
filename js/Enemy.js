@@ -70,7 +70,7 @@ function Enemy (game, key, frame, key2, frame2) {
     this.body.bounce.setTo(0.9, 0.9);
     //this.body.velocity.x = game.rnd.integerInRange(0, 400);
 
-    this.health = 100;
+    this.health = 50; //original: 100
 
     //this.body.acceleration.set(4);
 
