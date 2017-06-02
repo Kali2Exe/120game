@@ -34,6 +34,8 @@ gameObj.Boot.prototype = {
         this.load.atlasJSONHash('bubbles', 'bubblesV2.png', 'bubbles.json');        
         this.load.atlasJSONHash('bar', 'resourcebar.png', 'resourcebar.json');
         this.load.atlasJSONHash('warning', 'warning.png', 'warning.json');
+        this.load.image('creditstext', 'credits_text.png');
+        this.load.image('credits', 'credits.png');
         //this.load.atlasJSONHash('stab', 'stab.png', 'stab.json');
 
         this.good = true;
@@ -58,7 +60,9 @@ gameObj.Preloader.prototype = {
 
         this.load.image('bg', 'vibrantbg.png');
         this.load.image('bg2', 'BG-4.jpg');
-        this.load.image('tutorialbg', 'tutorialV2.png');
+        this.load.image('tutorial1', 'tutorial1.png');
+        this.load.image('tutorial2', 'tutorial2.png');
+        this.load.image('tutorial3', 'tutorial3.png');
         this.load.image('titlebg', 'TitleV2.jpg');
         //load static gameover image
         this.load.image('gameoverbg', 'gameover.png');                
@@ -214,6 +218,9 @@ gameObj.Title.prototype = {
 //use for other things
 gameObj.Tutorial = function () {
 };
+
+var tutstate = 1;
+
 gameObj.Tutorial.prototype = {
     preload: function () {
 
@@ -238,12 +245,13 @@ gameObj.Tutorial.prototype = {
     */
         
         //add background image of tutorial screen
-        this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorialbg');
+        this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial1');
 
+    	this.cursors = game.input.keyboard.createCursorKeys();
         this.enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
         this.zeroKey = game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
         this.shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
-        this.player = new Player(this.game, 'fishy', 'fishy1', 'brushSon', 'brush_flipped');
+        //this.player = new Player(this.game, 'fishy', 'fishy1', 'brushSon', 'brush_flipped');
     },
     update: function () {
         //if you press Enter, you go to Play screen
@@ -266,6 +274,24 @@ gameObj.Tutorial.prototype = {
             this.bgm4Sound.stop();
         }
 
+        if(this.cursors.right.isDown && tutstate == 1) {
+        	tutstate = 2;
+        	this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial2');
+        } else if (this.cursors.left.isDown && tutstate == 2){
+        	tutstate = 1;
+        	this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial1');
+        } else if (this.cursors.right.isDown && tutstate == 2){
+        	tutstate = 3;
+	        this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial3');
+        } else if (this.cursors.left.isDown && tutstate == 3){
+        	tutstate = 2;
+        	this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial2');        	
+        }
+        ;
+
+        /*if() {
+
+        };*/
     }
 };
 
