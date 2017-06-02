@@ -484,12 +484,12 @@ gameObj.Play.prototype = {
         this.gWcheck = false;
         this.gWarning = new Effect(this.game, 600, 300, 'warning', 'warning1', 'warning');
         this.gWarning.anchor.set(0.5);
-        this.globalTick = 300; //30000
+        this.globalTick = 30000; //30000
         this.globalWarning = game.time.create();
         this.globalWarning.repeat(this.globalTick, 4, function() {
 
             //each time this warning executes, reduce ticks and increase drain/enemy spawn faster
-            this.extra1 = this.extra1 -25000; //250
+            this.extra1 = this.extra1 -250; //250
 
             //console.log(this.deathTick.delay);
             //console.log(this.tick);
