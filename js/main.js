@@ -549,7 +549,7 @@ gameObj.Play.prototype = {
                 //coralA.healing = false;
             });
 
-            if (countOfDied === 4) {
+            if (countOfDied >= 4) {
                 this.bgm2Sound.stop();
                 this.bgm5Sound.play('',0,0.5,true,false); //play(marker, position, volume, loop, forceRestart)
                 this.tileBack.loadTexture('bg5');
