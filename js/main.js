@@ -10,7 +10,7 @@ gameObj.Boot.prototype = {
     init: function () {
         console.log('Boot: init');
         //when you click out of browser, the game will pause
-        this.stage.disableVisibilityChange = false;
+        this.stage.disableVisibilityChange = true; //orig value = false;
     },
     preload: function () {
 
@@ -35,7 +35,7 @@ gameObj.Boot.prototype = {
         this.load.atlasJSONHash('bar', 'resourcebar.png', 'resourcebar.json');
         this.load.atlasJSONHash('warning', 'warning.png', 'warning.json');
         this.load.image('creditstext', 'credits_text.png');
-        this.load.image('credits', 'credits.png');
+        this.load.image('credits', 'CREDITS.png');
         //this.load.atlasJSONHash('stab', 'stab.png', 'stab.json');
 
         this.good = true;
@@ -152,6 +152,17 @@ gameObj.Title.prototype = {
         this.background = game.add.tileSprite(0, 0, 1200, 800, 'titlebg');
         //this.background.scale.set(2, 2);
 
+        /*
+        //add credits 'button'
+        this.cred = game.add.sprite(1050,750,'creditstext');
+
+        //enable image input on the credit button
+        this.cred.inputEnabled = true;  
+
+        //credits screen when the button is pressed
+        this.cred.events.onInputDown.add(this.creditstart,this);
+        */
+
         //this.text6 = game.add.text(600, 20, 'Press 0 to toggle \ndebug/collision circles', {fontSize: '16px', fill: 'Red'});
 
         //set keys for playing game or for toggling debug/collision circles
@@ -162,7 +173,18 @@ gameObj.Title.prototype = {
         // play Title music
         //this.playMusic();
     },
+    /*
+    creditstart: function() {
+        //stops start menu bgm music
+        this.bgmSound.stop();
 
+        //play "click" sound
+        //this.goSound.play(); 
+
+        //goes into the actual game
+        this.state.start('CreditsScreen');
+    },
+    */
     update: function () {
         console.log('Title: update');
 
@@ -462,12 +484,12 @@ gameObj.Play.prototype = {
         this.gWcheck = false;
         this.gWarning = new Effect(this.game, 600, 300, 'warning', 'warning1', 'warning');
         this.gWarning.anchor.set(0.5);
-        this.globalTick = 30000;
+        this.globalTick = 30000; //30000
         this.globalWarning = game.time.create();
         this.globalWarning.repeat(this.globalTick, 4, function() {
 
             //each time this warning executes, reduce ticks and increase drain/enemy spawn faster
-            this.extra1 = this.extra1 -250;
+            this.extra1 = this.extra1 -250; //250
 
             //console.log(this.deathTick.delay);
             //console.log(this.tick);
@@ -751,11 +773,14 @@ gameObj.GameOverScreen.prototype = {
         this.bgm3Sound = game.add.audio('bgm3'); 
 
         //play bgm
-        this.bgm3Sound.play('',0,0.1,true,false); //play(marker, position, volume, loop, forceRestart) 
+        this.bgm3Sound.play('',2,0.1,true,false); //play(marker, position, volume, loop, forceRestart) 
 
         //this.endGround = game.add.image(0, 0, 'atlas', 'backgroundGREY');
 
         this.background = game.add.tileSprite(0, 0, 1200, 800, 'gameoverbg');
+
+        this.game.time.events.add(Phaser.Timer.SECOND * 5, this.changePicture, this); //change bg to credits after 10 seconds
+
         //Text that shows game over and key presses to go back to a screen or replay
         /*this.gameOverText = game.add.text(600, 250, 'Game Over', {fontSize: '64px', fill: 'red'});
         this.gameOverText.anchor.set(0.5);
@@ -779,6 +804,14 @@ gameObj.GameOverScreen.prototype = {
         //this.deathM = this.add.audio('gameOverSound');
         //this.deathM.play('', 0, 1, false);    // ('marker', start position, volume (0-1), loop)
     },
+    
+    changePicture: function() {
+    
+    //black fade thingy
+    this.camera.flash('#000000');
+    this.background = game.add.tileSprite(0, 0, 1200, 800, 'credits');
+
+    },
 
     update: function () {
         //if shift pressed, go to Title.  if enter key pressed, go to Play state and play again.
@@ -799,7 +832,7 @@ gameObj.GameOverScreen.prototype = {
 
             //stop bgm
             this.bgm3Sound.stop();
-        }
+        } 
     }
 
 };
@@ -812,6 +845,7 @@ game.state.add('Title', gameObj.Title);
 game.state.add('Tutorial', gameObj.Tutorial);
 game.state.add('Play', gameObj.Play);
 game.state.add('GameOverScreen', gameObj.GameOverScreen);
+//game.state.add('CreditsScreen', gameObj.CreditsScreen);
 game.state.start('Boot');
 
 var toggleDebug = false;
