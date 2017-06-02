@@ -390,12 +390,12 @@ gameObj.Play.prototype = {
         this.enemyGroup = game.add.group();
         this.enemyGroup.enableBody = true;
 
-        this.eneTick = 18000;
-        this.enemySpawner = game.time.create();
+        this.eneTick = 16000;
+        /*this.enemySpawner = game.time.create();
         this.enemySpawner.loop(this.eneTick, function() {
             this.enemyFish = new Enemy(game, 'enemy', 'enemyR1', 'enemy', 'eraserR1');
             this.enemyGroup.add(this.enemyFish);
-        }, this);
+        }, this);*/
 
         //need invisible walls....
         this.wallGroup = game.add.group();
@@ -416,7 +416,7 @@ gameObj.Play.prototype = {
 
         this.tick = 1500;
         //slow death of coral
-        this.deathTick = game.time.create();
+        /*this.deathTick = game.time.create();
         this.deathTick.loop(this.tick, function() {
             this.coralfg.forEach(function (coralA) {
                 if (coralA.canHighLight && !coralA.healing) {
@@ -424,9 +424,13 @@ gameObj.Play.prototype = {
                 }
                 //coralA.healing = false;
             });
-        }, this);
+
+        }, this);*/
 
         //global timer that increases coral drain and enemy spawn faster
+        this.extra1 = 0;
+        this.extra2 = 0;
+        this.gWcheck = false;
         this.gWarning = new Effect(this.game, 600, 300, 'warning', 'warning1', 'warning');
         this.gWarning.anchor.set(0.5);
         this.globalTick = 30000;
@@ -434,15 +438,15 @@ gameObj.Play.prototype = {
         this.globalWarning.repeat(this.globalTick, 4, function() {
 
             //each time this warning executes, reduce ticks and increase drain/enemy spawn faster
-            if (this.tick > 500) {
-                this.tick = this.tick - 250;
-                console.log(this.tick);
-            }
+            this.extra1 = this.extra1 -250;
 
-            if (this.eneTick > 14000) {
-                this.eneTick = this.eneTick - 1000;
-                console.log(this.eneTick);
-            }
+            //console.log(this.deathTick.delay);
+            //console.log(this.tick);
+
+            this.extra2 = this.extra2 - 1000;
+            //console.log(this.enemySpawner.delay);
+            //console.log(this.eneTick);
+            this.gWcheck = true;
             this.gWarning.visible = true;
             this.gWarning.animations.play('warning');
             // .to({properties}, duration, ease, autoStart, delay, repeat, yoyo)
@@ -490,14 +494,34 @@ gameObj.Play.prototype = {
         //loop event (delay, repeatCount, callback, context, arguments
 
         this.player.bringToTop();
-        this.enemySpawner.start();
+        //this.enemySpawner.start();
         this.deathCheck.start();
-        this.deathTick.start();
+        //this.deathTick.start();
         this.globalWarning.start();
 
     },
 
     update: function () {
+
+        if (this.tick < game.time.now) {
+            this.coralfg.forEach(function (coralA) {
+                if (coralA.canHighLight && !coralA.healing) {
+                    coralA.health--;
+                }
+                //coralA.healing = false;
+            });
+
+            this.tick = game.time.now + 1500 + this.extra1;
+
+		}
+
+		if (this.eneTick < game.time.now) {
+            this.enemyFish = new Enemy(game, 'enemy', 'enemyR1', 'enemy', 'eraserR1');
+            this.enemyGroup.add(this.enemyFish);
+
+            this.eneTick = game.time.now + 16000 + this.extra2;
+
+		}
 
         /*this.enemyGroup.forEach(function (enemyA) {
             enemyA.body.velocity.setTo(enemyA.vel, enemyA.vel);
@@ -529,7 +553,8 @@ gameObj.Play.prototype = {
                 coralB.healthText.visible = !coralB.healthText.visible;
             });
         }
-
+        this.tick = this.tick + 1;
+        this.eneTick = this.eneTick + 1;
     },
 
     //if player overlap coral, highlight it
@@ -643,6 +668,11 @@ gameObj.Play.prototype = {
       enemy.leftFace = !enemy.leftFace;
       //console.log("hit");
     },
+
+    drainCoral: function(tick) {
+
+    },
+
 
     render: function () {
         //game.debug.text(`Debugging Phaser ${Phaser.VERSION}`, 20, 20, 'yellow');
