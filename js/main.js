@@ -385,23 +385,48 @@ gameObj.Play.prototype = {
 
         //creating coral images
         this.count = 0;
+        //i * 3 + j	
+        for (var i = 0; i < 3; i++) {
+        	for (var j = 0; j < 6; j++) {
+        		var nump = 0;
+        		if ((i == 0) && (j == 3 || j == 5)) {
+        			if (j == 3) {
+        				nump = 10;
+        			} else {
+        				nump = 12
+        			}
+        		} else if ((i == 1) && (j == 0 || j == 2 || j == 4 )) {
+        			if (j == 0) {
+        				nump = 13;
+        			} else if (j == 2) {
+        				nump = 15;
+        			} else if ( j == 4) {
+        				nump = 17;
+        			}
+        		} else if ((i == 2) && (j == 0 || j == 3 || j == 5)) {
+        			if (j == 0) {
+        				nump = 19;
+        			} else if (j == 3) {
+        				nump = 22;
+        			} else if (j == 5) {
+        				nump = 24;
+        			}
+        		}
 
-        for (var i = 0; i < 6; i++) {
-            this.count++;
-            if (this.count < 10) {
-                if (i < 1 || 4 < i) {
-                    this.dedCoral = game.add.image(i*200, 400, 'dead', 'dedcoral_0'+ this.count);
+        		if (nump != 0) {
+        			this.dedCoral = game.add.image(j*200, i*200 + 200, 'dead', 'dedcoral_'+ nump);
                     game.add.existing(this.dedCoral);
                     this.coralded.add(this.dedCoral);
-                    this.coralPic = new Coral(this, 'atlas', 'vibrantcoral_0' + this.count, i * 200, 400);
+                    this.coralPic = new Coral(this, 'atlas', 'vibrantcoral_' + nump, j* 200, i*200 + 200);
                     game.add.existing(this.coralPic);
                     this.coralfg.add(this.coralPic);
-                }
-            }
-
+        		}
+        	}
         }
+
+        
         //second row of coral
-        for (var j = 0; j < 6; j++) {
+        /*for (var j = 0; j < 6; j++) {
             this.count++;
             if (this.count < 10) {
                 this.dedCoral = game.add.image(j*200, 600, 'dead', 'dedcoral_0'+ this.count);
@@ -414,7 +439,7 @@ gameObj.Play.prototype = {
             this.coralded.add(this.dedCoral);
             game.add.existing(this.coralPic);
             this.coralfg.add(this.coralPic);
-        }
+        }*/
 
         //need this to place coral under stuff
         game.world.moveDown(this.coralded);
