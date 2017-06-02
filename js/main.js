@@ -33,6 +33,7 @@ gameObj.Boot.prototype = {
         this.load.atlasJSONHash('slash', 'slash.png', 'slash.json');
         this.load.atlasJSONHash('bubbles', 'bubblesV2.png', 'bubbles.json');        
         this.load.atlasJSONHash('bar', 'resourcebar.png', 'resourcebar.json');
+        this.load.atlasJSONHash('warning', 'warning.png', 'warning.json');
         //this.load.atlasJSONHash('stab', 'stab.png', 'stab.json');
 
         this.good = true;
@@ -389,11 +390,12 @@ gameObj.Play.prototype = {
         this.enemyGroup = game.add.group();
         this.enemyGroup.enableBody = true;
 
-        this.enemySpawner = game.time.create();
-        this.enemySpawner.loop(15000, function() {
+        this.eneTick = 16000;
+        /*this.enemySpawner = game.time.create();
+        this.enemySpawner.loop(this.eneTick, function() {
             this.enemyFish = new Enemy(game, 'enemy', 'enemyR1', 'enemy', 'eraserR1');
             this.enemyGroup.add(this.enemyFish);
-        }, this);
+        }, this);*/
 
         //need invisible walls....
         this.wallGroup = game.add.group();
@@ -410,16 +412,52 @@ gameObj.Play.prototype = {
 
         //enemy effects
         this.effectSlash = new Effect(this.game, -400, -400, 'slash', 'slash1', 'slash');
-        this.effectBubbles = new Effect(this.game, -400, -400, 'bubbles', 'bubbles1', 'bubbles');
+        //this.effectBubbles = new Effect(this.game, -400, -400, 'bubbles', 'bubbles1', 'bubbles');
+
+        this.tick = 1500;
+        //slow death of coral
+        /*this.deathTick = game.time.create();
+        this.deathTick.loop(this.tick, function() {
+            this.coralfg.forEach(function (coralA) {
+                if (coralA.canHighLight && !coralA.healing) {
+                    coralA.health--;
+                }
+                //coralA.healing = false;
+            });
+
+        }, this);*/
+
+        //global timer that increases coral drain and enemy spawn faster
+        this.extra1 = 0;
+        this.extra2 = 0;
+        this.gWcheck = false;
+        this.gWarning = new Effect(this.game, 600, 300, 'warning', 'warning1', 'warning');
+        this.gWarning.anchor.set(0.5);
+        this.globalTick = 30000;
+        this.globalWarning = game.time.create();
+        this.globalWarning.repeat(this.globalTick, 4, function() {
+
+            //each time this warning executes, reduce ticks and increase drain/enemy spawn faster
+            this.extra1 = this.extra1 -250;
+
+            //console.log(this.deathTick.delay);
+            //console.log(this.tick);
+
+            this.extra2 = this.extra2 - 1000;
+            //console.log(this.enemySpawner.delay);
+            //console.log(this.eneTick);
+            this.gWcheck = true;
+            this.gWarning.visible = true;
+            this.gWarning.animations.play('warning');
+            // .to({properties}, duration, ease, autoStart, delay, repeat, yoyo)
+
+        }, this);
 
         //adding player sprite
         this.player = new Player(this.game, 'fishy', 'fishy1', 'brushSon', 'brush_flipped', 'bar', 'bar100');
         this.player.paintText = game.add.text(this.player.x, this.player.y-25, this.player.paint,
             {fontSize: '30px', fill: "red", stroke: "white", strokeThickness: "3"});
         //this.player.addChild(this.player.paintText);
-
-
-        this.tick = 1000;
 
         //overlapping coral that will be healed
         this.affectedCoral = null;
@@ -429,24 +467,6 @@ gameObj.Play.prototype = {
 
         this.aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
 
-
-        //slow death of coral
-        this.deathTick = game.time.create();
-        this.deathTick.loop(this.tick, function() {
-            this.coralfg.forEach(function (coralA) {
-                if (coralA.canHighLight && !coralA.healing) {
-                    coralA.health--;
-                }
-                //coralA.healing = false;
-            });
-        }, this);
-
-        /*this.globalWarning = game.time.create();
-        this.globalWarning.loop(30000, function() {
-            if (this.tick > 1000) {
-                this.tick = this.tick - 250;
-            }
-        }, this);*/
 
         countOfDied = 0;
         //deathCheck, check for number of dead coral
@@ -474,13 +494,34 @@ gameObj.Play.prototype = {
         //loop event (delay, repeatCount, callback, context, arguments
 
         this.player.bringToTop();
-        this.enemySpawner.start();
+        //this.enemySpawner.start();
         this.deathCheck.start();
-        this.deathTick.start();
+        //this.deathTick.start();
+        this.globalWarning.start();
 
     },
 
     update: function () {
+
+        if (this.tick < game.time.now) {
+            this.coralfg.forEach(function (coralA) {
+                if (coralA.canHighLight && !coralA.healing) {
+                    coralA.health--;
+                }
+                //coralA.healing = false;
+            });
+
+            this.tick = game.time.now + 1500 + this.extra1;
+
+		}
+
+		if (this.eneTick < game.time.now) {
+            this.enemyFish = new Enemy(game, 'enemy', 'enemyR1', 'enemy', 'eraserR1');
+            this.enemyGroup.add(this.enemyFish);
+
+            this.eneTick = game.time.now + 16000 + this.extra2;
+
+		}
 
         /*this.enemyGroup.forEach(function (enemyA) {
             enemyA.body.velocity.setTo(enemyA.vel, enemyA.vel);
@@ -491,7 +532,7 @@ gameObj.Play.prototype = {
         this.effectSparkle.visible = false;
 
         this.effectSlash.visible = false;
-        this.effectBubbles.visible = false;
+        //this.effectBubbles.visible = false;
 
         //overlap and collide logic (see functions)
         game.physics.arcade.overlap(this.player, this.coralfg, this.highLightBorder, null, this);
@@ -512,7 +553,8 @@ gameObj.Play.prototype = {
                 coralB.healthText.visible = !coralB.healthText.visible;
             });
         }
-
+        this.tick = this.tick + 1;
+        this.eneTick = this.eneTick + 1;
     },
 
     //if player overlap coral, highlight it
@@ -605,17 +647,17 @@ gameObj.Play.prototype = {
             //this.effectBubbles.visible = true;
             //this.effectBubbles.animations.play('bubbles');
 
-            bubblez = this.game.add.sprite(enemy.body.x-65,enemy.body.y-65,'bubbles');
-            bubblez.animations.add ('bubbles',[1,6,2],2,true)
-            bubblez.animations.play('bubbles',5,false,true);
+            this.bubblez = this.game.add.sprite(enemy.body.x-65,enemy.body.y-65,'bubbles');
+            this.bubblez.animations.add ('bubbles',[1,6,2],2,true);
+            this.bubblez.animations.play('bubbles',5,false,true);
 
             this.bubSfx.play('', 0, 0.5, false, false);
 
-            enemy.kill();
             enemy.eraser.kill();
-
-            enemy.destroy();
+            enemy.kill();
             enemy.eraser.destroy();
+            enemy.destroy();
+
 
         }
         
@@ -626,6 +668,11 @@ gameObj.Play.prototype = {
       enemy.leftFace = !enemy.leftFace;
       //console.log("hit");
     },
+
+    drainCoral: function(tick) {
+
+    },
+
 
     render: function () {
         //game.debug.text(`Debugging Phaser ${Phaser.VERSION}`, 20, 20, 'yellow');
