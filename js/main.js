@@ -274,18 +274,21 @@ gameObj.Tutorial.prototype = {
             this.bgm4Sound.stop();
         }
 
-        if(this.cursors.right.isDown && tutstate == 1) {
+        if(this.cursors.right.justPressed() && tutstate == 1) {
         	tutstate = 2;
         	this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial2');
-        } else if (this.cursors.left.isDown && tutstate == 2){
+        } else if (this.cursors.left.justPressed() && tutstate == 2){
         	tutstate = 1;
         	this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial1');
-        } else if (this.cursors.right.isDown && tutstate == 2){
+        } else if (this.cursors.right.justPressed() && tutstate == 2){
         	tutstate = 3;
 	        this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial3');
-        } else if (this.cursors.left.isDown && tutstate == 3){
+        } else if (this.cursors.left.justPressed() && tutstate == 3){
         	tutstate = 2;
         	this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial2');        	
+        } else if (this.cursors.right.justPressed() && tutstate ==3){
+        	tutstate = 1;
+        	this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial1');        	
         }
         ;
 
