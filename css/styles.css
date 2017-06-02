@@ -1,12 +1,13 @@
-@import url('https://fonts.googleapis.com/css?family=VT323');
+@import url('https://fonts.googleapis.com/css?family=Alegreya Sans SC');
 @import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
 
 
 body {
+	font-family: Alegreya Sans SC;
 	text-align: center; 
 	}
 
 .gametext {
-	font-size: 25pt;
-	margin-top: 20px;
+	font-size: 23pt;
+	margin-top: 10px;
 	}
