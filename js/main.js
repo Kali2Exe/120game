@@ -60,6 +60,7 @@ gameObj.Preloader.prototype = {
 
         this.load.image('bg', 'vibrantbg.png');
         this.load.image('bg2', 'BG-4.jpg');
+        this.load.image('bg5', 'BG-desat.jpg');
         this.load.image('tutorial1', 'tutorial1.png');
         this.load.image('tutorial2', 'tutorial2.png');
         this.load.image('tutorial3', 'tutorial3.png');
@@ -80,7 +81,8 @@ gameObj.Preloader.prototype = {
         this.load.audio('bgm1', 'hawaiiansdream.mp3'); 
         this.load.audio('bgm2', 'lastbreeze.mp3');
         this.load.audio('bgm3', 'sease.mp3');
-        this.load.audio('bgm4', 'rideon.mp3');                        
+        this.load.audio('bgm4', 'rideon.mp3');       
+        this.load.audio('bgm5', 'sad.mp3');                 
         // add preloader image2 and set as preloader sprite (auto-crops sprite)
         //this.preloadBar = this.add.sprite(0, 0,'atlas', 'loadimage2');
         //this.load.setPreloadSprite(this.preloadBar);
@@ -97,6 +99,7 @@ gameObj.Preloader.prototype = {
         this.load.audio('swish2', 'swish2.wav');
         this.load.audio('heal1', 'heal1.wav');
         this.load.audio('drink', 'drink.wav');
+        this.load.audio('switch', 'switch.wav');
 
 
 
@@ -258,6 +261,13 @@ gameObj.Tutorial.prototype = {
         //add bgm
         this.bgm4Sound = game.add.audio('bgm4'); 
 
+        //add sfx
+        this.switchSfx = game.add.audio('switch'); 
+        this.magical1Sfx = game.add.audio('magical1');
+
+
+
+
         //play bgm
         this.bgm4Sound.play('',0,0.5,true,false); //play(marker, position, volume, loop, forceRestart)
 
@@ -278,6 +288,7 @@ gameObj.Tutorial.prototype = {
     update: function () {
         //if you press Enter, you go to Play screen
         if (this.enterKey.justPressed()) {
+            this.magical1Sfx.play('',0,1,false,true);
             this.state.start('Play');
 
             //stop bgm
@@ -297,18 +308,23 @@ gameObj.Tutorial.prototype = {
         }
 
         if(this.cursors.right.justPressed() && tutstate == 1) {
+            this.switchSfx.play('',0,1,false,true);
         	tutstate = 2;
         	this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial2');
         } else if (this.cursors.left.justPressed() && tutstate == 2){
+            this.switchSfx.play('',0,1,false,true);
         	tutstate = 1;
         	this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial1');
         } else if (this.cursors.right.justPressed() && tutstate == 2){
+            this.switchSfx.play('',0,1,false,true);
         	tutstate = 3;
 	        this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial3');
         } else if (this.cursors.left.justPressed() && tutstate == 3){
+            this.switchSfx.play('',0,1,false,true);
         	tutstate = 2;
         	this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial2');        	
         } else if (this.cursors.right.justPressed() && tutstate ==3){
+            this.switchSfx.play('',0,1,false,true);
         	tutstate = 1;
         	this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial1');        	
         }
@@ -340,6 +356,7 @@ gameObj.Play.prototype = {
         //SOUND STUFF
         //add bgm
         this.bgm2Sound = game.add.audio('bgm2'); 
+        this.bgm5Sound = game.add.audio('bgm5');
 
         //add sfx
         this.drinkSfx = game.add.audio('drink'); 
@@ -531,11 +548,20 @@ gameObj.Play.prototype = {
                 }
                 //coralA.healing = false;
             });
+
+            if (countOfDied === 4) {
+                this.bgm2Sound.stop();
+                this.bgm5Sound.play('',0,0.5,true,false); //play(marker, position, volume, loop, forceRestart)
+                this.tileBack.loadTexture('bg5');
+
+
+            }
+
             if (countOfDied === 8) {
                 this.state.start('GameOverScreen');
 
                 //stop game bgm
-                this.bgm2Sound.stop();
+                this.bgm5Sound.stop();
 
             } else {
                 countOfDied = 0;
