@@ -91,7 +91,7 @@ Player.prototype.update = function () {
     //movement controls
     if (this.cursors.left.isDown) {
         //this.x -= this.speed;
-        this.body.velocity.x = -200;
+        this.body.velocity.x = -225;
         //this.body.acceleration.x = -8;
         this.scale.x = -1;
 
@@ -103,7 +103,7 @@ Player.prototype.update = function () {
     } else if (this.cursors.right.isDown) {
         //If press right, go right
         //this.x += this.speed;
-        this.body.velocity.x = 200;
+        this.body.velocity.x = 225;
         //this.body.acceleration.x = 8;
         this.scale.x = 1;
 
@@ -116,13 +116,13 @@ Player.prototype.update = function () {
     if (this.cursors.down.isDown) {
         //If press down, move down
         //this.y += this.speed;
-        this.body.velocity.y = 200;
+        this.body.velocity.y = 225;
         //this.body.acceleration.y = 8;
 
     } else if (this.cursors.up.isDown) {
         //If press up, go up
         //this.y -= this.speed;
-        this.body.velocity.y = -200;
+        this.body.velocity.y = -225;
         //this.body.acceleration.y = -8;
     }
 
@@ -153,7 +153,7 @@ Player.prototype.update = function () {
 
     }
 
-    this.body.acceleration = -50;
+    this.body.acceleration = -40;
 
     //change key control
     if (this.changeKey.justPressed()) {

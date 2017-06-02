@@ -43,7 +43,9 @@ Coral.prototype.constructor = Coral;
 
 Coral.prototype.update = function() {
 
-    this.alpha = this.health/100;
+    //alpha goes to 0 to 1
+    //this.alpha = this.health/100; //old
+    this.alpha = (100 * Math.pow(0.97, 100-this.health))/100;
 
     //this.healing = false;
     if (100 < this.health) {
@@ -55,7 +57,7 @@ Coral.prototype.update = function() {
     //health status's
     if (50 < this.health && this.health <= 100) {
         this.status = 'healthy';
-        this.statColor = 'LimeGreen';
+        this.statColor = 'Green';
     }
     else if (25 < this.health && this.health <= 50) {
         this.status = 'warning';

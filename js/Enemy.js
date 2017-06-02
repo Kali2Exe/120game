@@ -70,7 +70,7 @@ function Enemy (game, key, frame, key2, frame2) {
     this.body.bounce.setTo(0.9, 0.9);
     //this.body.velocity.x = game.rnd.integerInRange(0, 400);
 
-    this.health = 100;
+    this.health = 50; //original: 100
 
     //this.body.acceleration.set(4);
 
@@ -95,16 +95,6 @@ Enemy.prototype.update = function() {
         this.eraser.y = this.y + 32;
     }
 
-    //body touching
-    //if health is <= 0, kill and remove from group
-    if (this.health <= 0) {
-        this.kill();
-        this.eraser.kill();
-
-        this.destroy();
-        this.eraser.destroy();
-
-    }
 
 };
 
