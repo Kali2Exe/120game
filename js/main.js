@@ -522,6 +522,9 @@ gameObj.Play.prototype = {
                 this.bgm2Sound.stop();
                 this.bgm5Sound.play('',0,0.5,true,false); //play(marker, position, volume, loop, forceRestart)
                 this.tileBack.loadTexture('bg5');
+                if (this.extra1 != -1350) {
+                    this.extra1 = -1350;
+                }
 
             }
 

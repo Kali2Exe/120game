@@ -2,16 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d306e71d-c837-4aed-8324-b4ab67078931" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/Brush.js" afterPath="$PROJECT_DIR$/js/Brush.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/Coral.js" afterPath="$PROJECT_DIR$/js/Coral.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/Effect.js" afterPath="$PROJECT_DIR$/js/Effect.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/Enemy.js" afterPath="$PROJECT_DIR$/js/Enemy.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/Eraser.js" afterPath="$PROJECT_DIR$/js/Eraser.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/PaintFiller.js" afterPath="$PROJECT_DIR$/js/PaintFiller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/Player.js" afterPath="$PROJECT_DIR$/js/Player.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/ResourceBar.js" afterPath="$PROJECT_DIR$/js/ResourceBar.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/Wall.js" afterPath="$PROJECT_DIR$/js/Wall.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/main.js" afterPath="$PROJECT_DIR$/js/main.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,18 +20,18 @@
       <file leaf-file-name="PaintFiller.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/PaintFiller.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="538">
+            <state relative-caret-position="561">
               <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="79">
-              <caret line="792" column="96" lean-forward="false" selection-start-line="792" selection-start-column="96" selection-end-line="792" selection-end-column="96" />
+            <state relative-caret-position="385">
+              <caret line="521" column="35" lean-forward="true" selection-start-line="521" selection-start-column="35" selection-end-line="521" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -50,7 +40,7 @@
       <file leaf-file-name="ResourceBar.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/ResourceBar.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="351">
+            <state relative-caret-position="476">
               <caret line="30" column="36" lean-forward="false" selection-start-line="30" selection-start-column="36" selection-end-line="30" selection-end-column="36" />
               <folding>
                 <element signature="n#!!doc;n#ResourceBar#0" expanded="false" />
@@ -96,14 +86,14 @@
       <file leaf-file-name="Player.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/Player.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1859">
+            <state relative-caret-position="935">
               <caret line="55" column="27" lean-forward="false" selection-start-line="55" selection-start-column="27" selection-end-line="55" selection-end-column="27" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Brush.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Brush.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/Brush.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="238">
@@ -118,7 +108,7 @@
       <file leaf-file-name="Enemy.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/Enemy.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
+            <state relative-caret-position="1411">
               <caret line="83" column="55" lean-forward="false" selection-start-line="83" selection-start-column="55" selection-end-line="83" selection-end-column="55" />
               <folding />
             </state>
@@ -128,7 +118,7 @@
       <file leaf-file-name="Coral.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/Coral.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="725">
+            <state relative-caret-position="1241">
               <caret line="73" column="36" lean-forward="false" selection-start-line="73" selection-start-column="36" selection-end-line="73" selection-end-column="36" />
               <folding />
             </state>
@@ -172,11 +162,11 @@
         <option value="$PROJECT_DIR$/js/Effect.js" />
         <option value="$PROJECT_DIR$/js/Enemy.js" />
         <option value="$PROJECT_DIR$/js/Eraser.js" />
-        <option value="$PROJECT_DIR$/js/main.js" />
         <option value="$PROJECT_DIR$/js/PaintFiller.js" />
         <option value="$PROJECT_DIR$/js/Player.js" />
         <option value="$PROJECT_DIR$/js/ResourceBar.js" />
         <option value="$PROJECT_DIR$/js/Wall.js" />
+        <option value="$PROJECT_DIR$/js/main.js" />
       </list>
     </option>
   </component>
@@ -207,7 +197,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -236,7 +226,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -842,7 +832,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/Coral.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="725">
+        <state relative-caret-position="1241">
           <caret line="73" column="36" lean-forward="false" selection-start-line="73" selection-start-column="36" selection-end-line="73" selection-end-column="36" />
           <folding />
         </state>
@@ -860,7 +850,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/Enemy.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
+        <state relative-caret-position="1411">
           <caret line="83" column="55" lean-forward="false" selection-start-line="83" selection-start-column="55" selection-end-line="83" selection-end-column="55" />
           <folding />
         </state>
@@ -876,17 +866,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="79">
-          <caret line="792" column="96" lean-forward="false" selection-start-line="792" selection-start-column="96" selection-end-line="792" selection-end-column="96" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/PaintFiller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="538">
+        <state relative-caret-position="561">
           <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
           <folding />
         </state>
@@ -894,7 +876,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/Player.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1859">
+        <state relative-caret-position="935">
           <caret line="55" column="27" lean-forward="false" selection-start-line="55" selection-start-column="27" selection-end-line="55" selection-end-column="27" />
           <folding />
         </state>
@@ -902,7 +884,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/ResourceBar.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
+        <state relative-caret-position="476">
           <caret line="30" column="36" lean-forward="false" selection-start-line="30" selection-start-column="36" selection-end-line="30" selection-end-column="36" />
           <folding>
             <element signature="n#!!doc;n#ResourceBar#0" expanded="false" />
@@ -925,6 +907,14 @@
           <folding>
             <element signature="n#!!doc;n#Brush#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="385">
+          <caret line="521" column="35" lean-forward="true" selection-start-line="521" selection-start-column="35" selection-end-line="521" selection-end-column="35" />
+          <folding />
         </state>
       </provider>
     </entry>
