@@ -64,7 +64,7 @@ gameObj.Preloader.prototype = {
         this.load.image('tutorial1', 'tutorial1.png');
         this.load.image('tutorial2', 'tutorial2.png');
         this.load.image('tutorial3', 'tutorial3.png');
-        this.load.image('titlebg', 'TitleV2.jpg');
+        this.load.image('titlebg', 'title.png');
         //load static gameover image
         this.load.image('gameoverbg', 'gameover.png');                
         //vibrantcoral_1
@@ -280,10 +280,12 @@ gameObj.Tutorial.prototype = {
         this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial1');
 
     	this.cursors = game.input.keyboard.createCursorKeys();
+        this.qKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
+        this.eKey = game.input.keyboard.addKey(Phaser.Keyboard.E);
         this.enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
         this.zeroKey = game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
         this.shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
-        //this.player = new Player(this.game, 'fishy', 'fishy1', 'brushSon', 'brush_flipped');
+        this.player = new Player(this.game, 'fishy', 'fishy1', 'brushSon', 'brush_flipped');
     },
     update: function () {
         //if you press Enter, you go to Play screen
@@ -307,26 +309,31 @@ gameObj.Tutorial.prototype = {
             this.bgm4Sound.stop();
         }
 
-        if(this.cursors.right.justPressed() && tutstate == 1) {
+        if(this.eKey.justPressed() && tutstate == 1) {
             this.switchSfx.play('',0,1,false,true);
         	tutstate = 2;
-        	this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial2');
-        } else if (this.cursors.left.justPressed() && tutstate == 2){
+            this.background.loadTexture('tutorial2');
+        	//this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial2');
+        } else if (this.qKey.justPressed() && tutstate == 2){
             this.switchSfx.play('',0,1,false,true);
         	tutstate = 1;
-        	this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial1');
-        } else if (this.cursors.right.justPressed() && tutstate == 2){
+            this.background.loadTexture('tutorial1');
+        	//this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial1');
+        } else if (this.eKey.justPressed() && tutstate == 2){
             this.switchSfx.play('',0,1,false,true);
         	tutstate = 3;
-	        this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial3');
-        } else if (this.cursors.left.justPressed() && tutstate == 3){
+            this.background.loadTexture('tutorial3');
+	        //this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial3');
+        } else if (this.qKey.justPressed() && tutstate == 3){
             this.switchSfx.play('',0,1,false,true);
         	tutstate = 2;
-        	this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial2');        	
-        } else if (this.cursors.right.justPressed() && tutstate ==3){
+            this.background.loadTexture('tutorial2');
+        	//this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial2');        	
+        } else if (this.eKey.justPressed() && tutstate ==3){
             this.switchSfx.play('',0,1,false,true);
         	tutstate = 1;
-        	this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial1');        	
+            this.background.loadTexture('tutorial1');
+        	//this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial1');        	
         }
         ;
 
@@ -889,7 +896,7 @@ gameObj.GameOverScreen.prototype = {
 };
 
 // init game
-var game = new Phaser.Game(1200, 800, Phaser.AUTO, 'gamecanvas');
+var game = new Phaser.Game(1200, 800, Phaser.CANVAS, 'gamecanvas');
 game.state.add('Boot', gameObj.Boot);
 game.state.add('Preloader', gameObj.Preloader);
 game.state.add('Title', gameObj.Title);

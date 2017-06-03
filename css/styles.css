@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Alegreya Sans SC');
 @import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
 
+html, body, #gamecanvas {margin: 0; height: 100%; padding: 0; overflow: hidden}
 
 body {
 	font-family: Alegreya Sans SC;
