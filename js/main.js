@@ -20,6 +20,11 @@ gameObj.Boot.prototype = {
         //this.game.scale.pageAlignVertically = true;
         //this.game.scale.refresh();
 
+        this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.game.scale.setShowAll();
+        window.addEventListener('resize', function () {  this.game.scale.refresh();});
+        this.game.scale.refresh();
+        
         console.log('Boot: preload');
         //main use of Boot to load atlas from assets/img
         this.load.path = 'assets/img/';
