@@ -26,7 +26,7 @@ gameObj.Boot.prototype = {
         this.game.scale.refresh();
         
         console.log('Boot: preload');
-        //main use of Boot to load atlas from assets/img
+        //main use of Boot to load atlases from assets/img
         this.load.path = 'assets/img/';
         this.load.atlasJSONHash('atlas', 'sprites.png', 'sprites.json');
         this.load.atlasJSONHash('dead', 'spritesded.png', 'spritesded.json');
@@ -63,6 +63,7 @@ gameObj.Preloader.prototype = {
     preload: function () {
         console.log('Preloader: preload');
 
+        //load extraneous images
         this.load.image('bg', 'vibrantbg.png');
         this.load.image('bg2', 'BG-4.jpg');
         this.load.image('bg5', 'BG-desat.jpg');
@@ -71,14 +72,10 @@ gameObj.Preloader.prototype = {
         this.load.image('tutorial3', 'tutorial3.png');
         this.load.image('titlebg', 'title.png');
         //load static gameover image
-        this.load.image('gameoverbg', 'gameover.png');                
-        //vibrantcoral_1
-        //this.load.image('player', 'ship.png');
-        //this.load.image('coral', 'teset.png');
+        this.load.image('gameoverbg', 'gameover.png');
         this.load.image('greenB', 'border_green.png');
         this.load.image('barv2', 'barv2.png');
-        //custom load screen.  loads image1 from atlas
-        //this.add.image(0,0, 'atlas', 'loadimage1');
+
 
         //audio stuff
         this.load.path = 'assets/audio/bgm/';
@@ -88,14 +85,11 @@ gameObj.Preloader.prototype = {
         this.load.audio('bgm3', 'sease.mp3');
         this.load.audio('bgm4', 'rideon.mp3');       
         this.load.audio('bgm5', 'sad.mp3');                 
-        // add preloader image2 and set as preloader sprite (auto-crops sprite)
-        //this.preloadBar = this.add.sprite(0, 0,'atlas', 'loadimage2');
-        //this.load.setPreloadSprite(this.preloadBar);
 
         //sfx stuff
         this.load.path = 'assets/audio/sfx/';
-        //add sfx
 
+        //add sfx
         this.load.audio('splat', 'impactsplat02.wav');
         this.load.audio('bub', 'impactsplat07.wav');
         this.load.audio('magical1', 'magical1.wav');
@@ -113,14 +107,9 @@ gameObj.Preloader.prototype = {
     create: function () {
         console.log('Preloader: create');
 
-        // disable preload bar crop while we wait for mp3 decoding
-        //this.preloadBar.cropEnabled = false;
     },
     update: function () {
-        // wait for first mp3 to properly decode
-        /*if(this.cache.isSoundDecoded('firstMusic')) {
-         this.state.start('Title');
-         }*/
+
         this.state.start('Title');
     }
 };
@@ -137,7 +126,7 @@ gameObj.Title.prototype = {
 
     },
 
-    //in create of Title, create the Title Screen with scrolling image
+    //in create of Title, create the Title Screen with image
     create: function () {
         console.log('Title: create');
 
@@ -171,15 +160,11 @@ gameObj.Title.prototype = {
         this.cred.events.onInputDown.add(this.creditstart,this);
         */
 
-        //this.text6 = game.add.text(600, 20, 'Press 0 to toggle \ndebug/collision circles', {fontSize: '16px', fill: 'Red'});
-
         //set keys for playing game or for toggling debug/collision circles
         this.enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
         this.zeroKey = game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
         this.shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
 
-        // play Title music
-        //this.playMusic();
     },
     /*
     creditstart: function() {
@@ -209,8 +194,8 @@ gameObj.Title.prototype = {
                 this.bgm1Sound.stop();
 
             } else {
+                //start play if not first play through
                 this.state.start('Play');
-
                 //stop title bgm
                 this.bgm1Sound.stop();
 
@@ -221,6 +206,7 @@ gameObj.Title.prototype = {
             toggleDebug = !toggleDebug;
         }
 
+        //shift key start tutorial
         if(this.shiftKey.justPressed()) {
             this.magical1Sfx.play('',0,1,false,true);
 
@@ -231,16 +217,6 @@ gameObj.Title.prototype = {
         }
 
     }
-
-    /*playMusic: function() {
-     console.log('Playing music');
-
-     //plays music
-     this.firstMusic = this.add.audio('firstMusic');
-     this.firstMusic.play('', 0, 0.75, true);   // ('marker', start position, volume (0-1), loop)
-
-     }*/
-
 
 };
 
@@ -257,6 +233,7 @@ gameObj.Tutorial.prototype = {
     },
     create: function () {
 
+        //create tutorial
         console.log('Tutorial: create');
 
         //black fade thingy
@@ -270,20 +247,13 @@ gameObj.Tutorial.prototype = {
         this.switchSfx = game.add.audio('switch'); 
         this.magical1Sfx = game.add.audio('magical1');
 
-
-
-
         //play bgm
         this.bgm4Sound.play('',0,0.5,true,false); //play(marker, position, volume, loop, forceRestart)
 
-    /*
-        this.text = game.add.text(600, 200, 'Tutorial!!! (Placeholder)', {fontSize: '64px', fill: 'white'});
-        this.text.anchor.set(0.5);
-    */
-        
         //add background image of tutorial screen
         this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial1');
 
+        //logical keys that move tutorial images forward or backward
     	this.cursors = game.input.keyboard.createCursorKeys();
         this.qKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
         this.eKey = game.input.keyboard.addKey(Phaser.Keyboard.E);
@@ -314,6 +284,7 @@ gameObj.Tutorial.prototype = {
             this.bgm4Sound.stop();
         }
 
+        //loads texture images
         if(this.eKey.justPressed() && tutstate == 1) {
             this.switchSfx.play('',0,1,false,true);
         	tutstate = 2;
@@ -340,11 +311,7 @@ gameObj.Tutorial.prototype = {
             this.background.loadTexture('tutorial1');
         	//this.background = game.add.tileSprite(0, 0, 1200, 800, 'tutorial1');        	
         }
-        ;
 
-        /*if() {
-
-        };*/
     }
 };
 
@@ -359,7 +326,7 @@ gameObj.Play.prototype = {
 
     },
 
-    //in create of Title, create the Title Screen with scrolling image
+    //in create of Play
     create: function () {
 
         //added quick black fade-in
@@ -436,24 +403,8 @@ gameObj.Play.prototype = {
         	}
         }
 
-        
-        //second row of coral
-        /*for (var j = 0; j < 6; j++) {
-            this.count++;
-            if (this.count < 10) {
-                this.dedCoral = game.add.image(j*200, 600, 'dead', 'dedcoral_0'+ this.count);
-                this.coralPic = new Coral(this, 'atlas', 'vibrantcoral_0' + this.count, j * 200, 600);
-            } else {
-                this.dedCoral = game.add.image(j*200, 600, 'dead', 'dedcoral_'+ this.count);
-                this.coralPic = new Coral(this, 'atlas', 'vibrantcoral_' + this.count, j * 200, 600);
-            }
-            game.add.existing(this.dedCoral);
-            this.coralded.add(this.dedCoral);
-            game.add.existing(this.coralPic);
-            this.coralfg.add(this.coralPic);
-        }*/
 
-        //need this to place coral under stuff
+        //need this to place dead coral under real coral
         game.world.moveDown(this.coralded);
         //game.world.moveUp(this.coralded);
 
@@ -475,11 +426,7 @@ gameObj.Play.prototype = {
 
         });
 
-
-        //test status text: will have to change later as part of coral
-        //this.healthText.anchor.set(0.5);
-
-        //paint fillers
+        //paint fillers that refill paint
         this.paintFillGroup = game.add.group();
         this.paintFillGroup.enableBody = true;
 
@@ -491,16 +438,11 @@ gameObj.Play.prototype = {
 
         //enemy creater, spawner
 
-        //enemy Spawner and shit
+        //enemy Group
         this.enemyGroup = game.add.group();
         this.enemyGroup.enableBody = true;
 
         this.eneTick = 16000;
-        /*this.enemySpawner = game.time.create();
-        this.enemySpawner.loop(this.eneTick, function() {
-            this.enemyFish = new Enemy(game, 'enemy', 'enemyR1', 'enemy', 'eraserR1');
-            this.enemyGroup.add(this.enemyFish);
-        }, this);*/
 
         //need invisible walls....
         this.wallGroup = game.add.group();
@@ -520,17 +462,6 @@ gameObj.Play.prototype = {
         //this.effectBubbles = new Effect(this.game, -400, -400, 'bubbles', 'bubbles1', 'bubbles');
 
         this.tick = 1500;
-        //slow death of coral
-        /*this.deathTick = game.time.create();
-        this.deathTick.loop(this.tick, function() {
-            this.coralfg.forEach(function (coralA) {
-                if (coralA.canHighLight && !coralA.healing) {
-                    coralA.health--;
-                }
-                //coralA.healing = false;
-            });
-
-        }, this);*/
 
         //global timer that increases coral drain and enemy spawn faster
         this.extra1 = 0;
@@ -570,6 +501,7 @@ gameObj.Play.prototype = {
         //debug toggles
         this.zeroKey = game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
 
+        //a key toggles text on and off
         this.aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
 
 
@@ -591,9 +523,9 @@ gameObj.Play.prototype = {
                 this.bgm5Sound.play('',0,0.5,true,false); //play(marker, position, volume, loop, forceRestart)
                 this.tileBack.loadTexture('bg5');
 
-
             }
 
+            //if all 8 coral die, start over
             if (countOfDied === 8) {
                 this.state.start('GameOverScreen');
 
@@ -608,15 +540,14 @@ gameObj.Play.prototype = {
         //loop event (delay, repeatCount, callback, context, arguments
 
         this.player.bringToTop();
-        //this.enemySpawner.start();
         this.deathCheck.start();
-        //this.deathTick.start();
         this.globalWarning.start();
 
     },
 
     update: function () {
 
+        //slow tick of coral drain
         if (this.tick < game.time.now) {
             this.coralfg.forEach(function (coralA) {
                 if (coralA.canHighLight && !coralA.healing) {
@@ -629,6 +560,7 @@ gameObj.Play.prototype = {
 
 		}
 
+		//enemy spawner
 		if (this.eneTick < game.time.now) {
             this.enemyFish = new Enemy(game, 'enemy', 'enemyR1', 'enemy', 'eraserR1');
             this.enemyGroup.add(this.enemyFish);
@@ -636,10 +568,6 @@ gameObj.Play.prototype = {
             this.eneTick = game.time.now + 16000 + this.extra2;
 
 		}
-
-        /*this.enemyGroup.forEach(function (enemyA) {
-            enemyA.body.velocity.setTo(enemyA.vel, enemyA.vel);
-        });*/
 
         this.effectGlow.visible = false;
         this.effectHeal.visible = false;
@@ -844,21 +772,6 @@ gameObj.GameOverScreen.prototype = {
 
         this.game.time.events.add(Phaser.Timer.SECOND * 5, this.changePicture, this); //change bg to credits after 10 seconds
 
-        //Text that shows game over and key presses to go back to a screen or replay
-        /*this.gameOverText = game.add.text(600, 250, 'Game Over', {fontSize: '64px', fill: 'red'});
-        this.gameOverText.anchor.set(0.5);
-        //this.gameOverText.scale.set(0.5, 0.5);
-
-        //this.goText = game.add.text(400, 250, 'Final Score: ' + globalScore.toFixed(1), {fontSize: '32px', fill: 'yellow'});
-        //this.goText.anchor.set(0.5);
-
-        this.exitT1 = game.add.text(600, 375, 'Press Shift to Title Screen', {fontSize: '64px', fill: 'red'});
-        this.exitT1.anchor.set(0.5);
-        this.exitT2 = game.add.text(600, 475, 'Press Enter to Replay', {fontSize: '64px', fill: 'red'});
-        this.exitT2.anchor.set(0.5);
-        */
-
-
         //Press keys to go back to title or replay
         this.shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
         this.enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
@@ -878,7 +791,6 @@ gameObj.GameOverScreen.prototype = {
 
     update: function () {
         //if shift pressed, go to Title.  if enter key pressed, go to Play state and play again.
-
         if (firstPlay === true) {
             firstPlay = false;
         }

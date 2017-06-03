@@ -11,6 +11,7 @@ function Effect (game, x, y, key, frame, word) {
     game.physics.arcade.enable(this);
     this.visible = false;
 
+    //assign animations depending on effect word
     if (word === 'white') {
         this.animations.add('white_glow', Phaser.Animation.generateFrameNames('highlight', 1, 6, '', 1), 6, false);
     } else if (word === 'green') {

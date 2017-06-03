@@ -6,7 +6,7 @@ function Enemy (game, key, frame, key2, frame2) {
     //new Sprite(game, x, y, key, frame)
     //random x y location and uses Enemy image
 
-    //console.log(x);
+    //set random spawn position and facing
     this.leftFace = null;
     this.pX = Math.random() * 1200;
     this.pY = Math.random() * 1200;
@@ -16,22 +16,21 @@ function Enemy (game, key, frame, key2, frame2) {
         this.leftFace = true;
     }
 
-    //eraser
+    // create eraser
     this.eraser = new Eraser(game, key2, frame2, this.pX, this.pY);
 
-    //game.add.existing(this.eraser);
-    //Enemy Sprite
+    //creates sprite for enemy
     Phaser.Sprite.call(this, game, this.pX, this.pY, key, frame);
     game.add.existing(this);
 
-    //enable physics and set to random velocity
+    //enable physics
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
 
     //set anchor/origin to middle
     this.anchor.set(0.5);
 
-    //different collision box
+    //different collision box, circle
     this.radius = this.width / 4;
     this.body.setCircle(
         this.radius,
@@ -82,7 +81,7 @@ Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.update = function() {
 
-
+    //switch face and eraser depending on left or right
     if (this.leftFace) {
         this.scale.x = -1;
         this.eraser.scale.x = -1;

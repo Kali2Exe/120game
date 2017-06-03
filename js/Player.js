@@ -11,6 +11,7 @@ function Player(game, key, frame, key2, frame2, key3, frame3) {
     //Phaser.Sprite.call(this, game, 600, 400, key2, 'brush');
     //game.add.existing(this);
 
+    //add weapon
     this.weapon = new Brush(game, key2, frame2);
 
     Phaser.Sprite.call(this, game, 600, 400, key, frame);
@@ -22,12 +23,10 @@ function Player(game, key, frame, key2, frame2, key3, frame3) {
     this.heal1Sfx = game.add.audio('heal1');
 
 
-    //this.addChild(this.weapon);
-
     //set anchor/origin to middle
     this.anchor.set(0.5);
 
-    //the scale is random
+    //the scale
     this.scale.x = 1;
     this.scale.y = 1;
 
@@ -35,15 +34,17 @@ function Player(game, key, frame, key2, frame2, key3, frame3) {
     this.animations.add('swim1', Phaser.Animation.generateFrameNames('fishy', 1, 5, '', 1), 9, true);
     this.animations.play('swim1');
 
-    //enable physics and set to random velocity
+    //enable physics
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
 
+    //set accel and vel
     this.body.drag.set(250);
     this.body.acceleration.set(8);
     this.body.maxVelocity.set(400);
     //this.body.minVelocity = 0;
 
+    //collision circle
     this.radius = this.width / 6;
     this.body.setCircle(
         this.radius,
@@ -52,6 +53,7 @@ function Player(game, key, frame, key2, frame2, key3, frame3) {
     );
     //this.body.velocity.x = game.rnd.integerInRange(0, 400);
 
+    //use Keys and movement
     this.cursors = game.input.keyboard.createCursorKeys();
     this.changeKey = game.input.keyboard.addKey(Phaser.Keyboard.C);
     this.useKey = game.input.keyboard.addKey(Phaser.Keyboard.X);

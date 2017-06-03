@@ -5,12 +5,14 @@ function ResourceBar (game, x, y, key, frame) {
 
     this.currentFrame = frame;
 
+    //create resource bar
     Phaser.Sprite.call(this, game, x, y, key, frame);
     game.add.existing(this);
 
     this.anchor.set(0.5);
     this.scale.setTo(2, 2);
 
+    //enable physics
     game.physics.arcade.enable(this);
     
 }
@@ -26,6 +28,7 @@ ResourceBar.prototype.update = function() {
 
 ResourceBar.prototype.barMeterCheck = function(player) {
 
+    //dense logic for setting frames
     //checks at 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 100
     if (87.5 < player.paint && player.paint <= 100 && this.frameName != 'bar100') {
         this.frameName = 'bar100';
