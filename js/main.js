@@ -10,7 +10,7 @@ gameObj.Boot.prototype = {
     init: function () {
         console.log('Boot: init');
         //when you click out of browser, the game will pause
-        this.stage.disableVisibilityChange = false; //orig value = false;
+        this.stage.disableVisibilityChange = true; //orig value = false;
     },
     preload: function () {
 
@@ -563,12 +563,16 @@ gameObj.Play.prototype = {
 
 		}
 
+
 		//enemy spawner
 		if (this.eneTick < game.time.now) {
             this.enemyFish = new Enemy(game, 'enemy', 'enemyR1', 'enemy', 'eraserR1');
+            this.enemyFish.tint = Math.random() * 0xffffff; //sprite tint every spawn
+
             this.enemyGroup.add(this.enemyFish);
 
             this.eneTick = game.time.now + 16000 + this.extra2;
+
 
 		}
 
@@ -722,6 +726,7 @@ gameObj.Play.prototype = {
     render: function () {
         //game.debug.text(`Debugging Phaser ${Phaser.VERSION}`, 20, 20, 'yellow');
         //game.debug.text('FPS: ' + game.time.fps, 20, 20, 'yellow');
+        //game.debug.text('Game time: ' + game.time.now, 20, 50, 'yellow');
 
         //if shift held, you can see hitcircle for bird
 
@@ -773,11 +778,16 @@ gameObj.GameOverScreen.prototype = {
 
         this.background = game.add.tileSprite(0, 0, 1200, 800, 'gameoverbg');
 
-        this.game.time.events.add(Phaser.Timer.SECOND * 5, this.changePicture, this); //change bg to credits after 10 seconds
+    	var style = { font: "20px Arial", fill: "#000000", boundsAlignH: "center", boundsAlignV: "middle" };
+        this.text = game.add.text(0, 0, "However, it did survive for " + game.time.now + " MS!", style);
+        this.text.setTextBounds(-20, 380, 1200, 800);
+
+        this.game.time.events.add(Phaser.Timer.SECOND * 10, this.changePicture, this); //change bg to credits after 10 seconds
 
         //Press keys to go back to title or replay
         this.shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
         this.enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+
 
         //game over sound
         //this.deathM = this.add.audio('gameOverSound');
@@ -789,6 +799,14 @@ gameObj.GameOverScreen.prototype = {
     //black fade thingy
     this.camera.flash('#000000');
     this.background = game.add.tileSprite(0, 0, 1200, 800, 'credits');
+
+    var style3 = { font: "bold 20px Arial", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle", stroke: "black", strokeThickness: 1 };
+    this.text3 = game.add.text(0, 0, "& YOU for helping!", style3);
+    this.text3.setTextBounds(-300, 350, 1200, 800);
+
+    var style2 = { font: "20px Arial", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle", stroke: "black", strokeThickness: 1  };
+    this.text2 = game.add.text(0, 0, "The coral reef survived for " + game.time.now + " MS!", style2);
+    this.text2.setTextBounds(-300, 380, 1200, 800);
 
     },
 
