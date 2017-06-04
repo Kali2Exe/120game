@@ -10,7 +10,7 @@ gameObj.Boot.prototype = {
     init: function () {
         console.log('Boot: init');
         //when you click out of browser, the game will pause
-        this.stage.disableVisibilityChange = false; //orig value = false;
+        this.stage.disableVisibilityChange = true; //orig value = false;
     },
     preload: function () {
 
@@ -315,6 +315,9 @@ gameObj.Tutorial.prototype = {
     }
 };
 
+var customgametime = 0;
+var customgametime2 = 0;
+
 //Play Screen
 gameObj.Play = function () {
 
@@ -328,6 +331,18 @@ gameObj.Play.prototype = {
 
     //in create of Play
     create: function () {
+
+    	//SECONDS COUNTER
+        this.gametime = game.time.create(false);
+        this.gametime.start();
+    	this.gametime.loop(1000, this.updateCounter, this);
+    	customgametime = 0;
+
+    	//Minutes COUNTER
+        this.gametime2 = game.time.create(false);
+        this.gametime2.start();
+    	this.gametime2.loop(60000, this.updateCounter2, this);
+    	customgametime2 = 0;    
 
         //added quick black fade-in
         this.camera.flash('#000000');
@@ -546,7 +561,24 @@ gameObj.Play.prototype = {
         this.deathCheck.start();
         this.globalWarning.start();
 
+
     },
+
+	updateCounter: function() { //custom game timer
+
+    	if (customgametime >= 60) { //go back to 0 once it hits 60
+    		customgametime = 0;
+    	} else {
+    		customgametime++;
+    	}
+
+	},
+
+	updateCounter2: function() { //custom game timer
+
+    customgametime2++;
+
+	},
 
     update: function () {
 
@@ -604,6 +636,17 @@ gameObj.Play.prototype = {
         }
         this.tick = this.tick + 1;
         this.eneTick = this.eneTick + 1;
+
+        //create text reminder @ ~8 seconds that you can toggle coral health
+        if (customgametime == 3){
+        	this.toggleAtext = this.add.text(this.game.world.centerX,this.game.world.centerY,
+        		'Remember!\n You can toggle coral health by pressing "A"!', 
+    			{font: '25px arial', fill: '#000000', align: 'center', stroke: 'white', strokeThickness: 2});
+  			this.toggleAtext.anchor.setTo(0.5, 0.5);        	
+        	this.time.events.add(5000, this.toggleAtext.destroy, this.toggleAtext, this.destroy, this.game.add.tween(this.toggleAtext).to( { alpha: 0 }, 2000, "Linear", true));
+
+        }        
+
     },
 
     //if player overlap coral, highlight it
@@ -725,8 +768,10 @@ gameObj.Play.prototype = {
 
     render: function () {
         //game.debug.text(`Debugging Phaser ${Phaser.VERSION}`, 20, 20, 'yellow');
-        //game.debug.text('FPS: ' + game.time.fps, 20, 20, 'yellow');
-        //game.debug.text('Game time: ' + game.time.now, 20, 50, 'yellow');
+        game.debug.text('FPS: ' + game.time.fps, 20, 20, 'yellow');
+        game.debug.text('Internal game time: ' + game.time.now, 20, 40, 'yellow');
+        game.debug.text('Game time (seconds): ' + customgametime, 20, 60, 'yellow');
+        game.debug.text('Game time (minutes): ' + customgametime2, 20, 80, 'yellow');
 
         //if shift held, you can see hitcircle for bird
 
@@ -778,9 +823,15 @@ gameObj.GameOverScreen.prototype = {
 
         this.background = game.add.tileSprite(0, 0, 1200, 800, 'gameoverbg');
 
+        if (customgametime < 10) {
     	var style = { font: "20px Arial", fill: "#000000", boundsAlignH: "center", boundsAlignV: "middle" };
-        this.text = game.add.text(0, 0, "However, it did survive for " + game.time.now + " MS!", style);
+        this.text = game.add.text(0, 0, "However, it did survive for " + customgametime2 + ":0" + customgametime + " minutes!", style);
         this.text.setTextBounds(-20, 380, 1200, 800);
+    	} else {
+    	var style = { font: "20px Arial", fill: "#000000", boundsAlignH: "center", boundsAlignV: "middle" };
+        this.text = game.add.text(0, 0, "However, it did survive for " + customgametime2 + ":" + customgametime + " minutes!", style);
+        this.text.setTextBounds(-20, 380, 1200, 800);    		
+    	}
 
         this.game.time.events.add(Phaser.Timer.SECOND * 10, this.changePicture, this); //change bg to credits after 10 seconds
 
@@ -800,13 +851,24 @@ gameObj.GameOverScreen.prototype = {
     this.camera.flash('#000000');
     this.background = game.add.tileSprite(0, 0, 1200, 800, 'credits');
 
+    if (customgametime < 10) {
     var style3 = { font: "bold 20px Arial", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle", stroke: "black", strokeThickness: 1 };
     this.text3 = game.add.text(0, 0, "& YOU for helping!", style3);
     this.text3.setTextBounds(-300, 350, 1200, 800);
 
     var style2 = { font: "20px Arial", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle", stroke: "black", strokeThickness: 1  };
-    this.text2 = game.add.text(0, 0, "The coral reef survived for " + game.time.now + " MS!", style2);
+    this.text2 = game.add.text(0, 0, "The coral reef survived for " + customgametime2 + ":0" + customgametime + " minutes!", style2);
     this.text2.setTextBounds(-300, 380, 1200, 800);
+    } else {
+
+    var style3 = { font: "bold 20px Arial", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle", stroke: "black", strokeThickness: 1 };
+    this.text3 = game.add.text(0, 0, "& YOU for helping!", style3);
+    this.text3.setTextBounds(-300, 350, 1200, 800);
+
+    var style2 = { font: "20px Arial", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle", stroke: "black", strokeThickness: 1  };
+    this.text2 = game.add.text(0, 0, "The coral reef survived for " + customgametime2 + ":" + customgametime + " minutes!", style2);
+    this.text2.setTextBounds(-300, 380, 1200, 800);
+    }
 
     },
 
