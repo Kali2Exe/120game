@@ -637,15 +637,14 @@ gameObj.Play.prototype = {
         this.tick = this.tick + 1;
         this.eneTick = this.eneTick + 1;
 
-        //create text reminder @ ~8 seconds that you can toggle coral health
-        if (customgametime == 8){
+        //ONLY ONCE. create text reminder @ ~8 seconds that you can toggle coral health
+        if (customgametime == 8 && customgametime2 < 1 && firstPlay == true){
         	this.toggleAtext = this.add.text(this.game.world.centerX,this.game.world.centerY,
         		'Remember!\n You can toggle coral health by pressing "A"!', 
     			{font: '25px arial', fill: '#000000', align: 'center', stroke: 'white', strokeThickness: 2});
   			this.toggleAtext.anchor.setTo(0.5, 0.5);        	
         	this.time.events.add(5000, this.toggleAtext.destroy, this.toggleAtext, this.destroy, this.game.add.tween(this.toggleAtext).to( { alpha: 0 }, 2000, "Linear", true));
-
-        }        
+        }
 
     },
 
@@ -825,11 +824,11 @@ gameObj.GameOverScreen.prototype = {
 
         if (customgametime < 10) {
     	var style = { font: "20px Arial", fill: "#000000", boundsAlignH: "center", boundsAlignV: "middle" };
-        this.text = game.add.text(0, 0, "However, it did survive for " + customgametime2 + "minute(s) : 0" + customgametime + " second(s)!", style);
+        this.text = game.add.text(0, 0, "However, it did survive for " + customgametime2 + " minute(s) : 0" + customgametime + " second(s)!", style);
         this.text.setTextBounds(-20, 380, 1200, 800);
     	} else {
     	var style = { font: "20px Arial", fill: "#000000", boundsAlignH: "center", boundsAlignV: "middle" };
-        this.text = game.add.text(0, 0, "However, it did survive for " + customgametime2 + "minute(s) : " + customgametime + " second(s)!", style);
+        this.text = game.add.text(0, 0, "However, it did survive for " + customgametime2 + " minute(s) : " + customgametime + " second(s)!", style);
         this.text.setTextBounds(-20, 380, 1200, 800);    		
     	}
 
@@ -857,7 +856,7 @@ gameObj.GameOverScreen.prototype = {
     this.text3.setTextBounds(-300, 350, 1200, 800);
 
     var style2 = { font: "20px Arial", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle", stroke: "black", strokeThickness: 1  };
-    this.text2 = game.add.text(0, 0, "The coral reef survived for " + customgametime2 + "minute(s) : 0" + customgametime + " second(s)!", style2);
+    this.text2 = game.add.text(0, 0, "The coral reef survived for " + customgametime2 + " minute(s) : 0" + customgametime + " second(s)!", style2);
     this.text2.setTextBounds(-300, 380, 1200, 800);
     } else {
 
@@ -866,7 +865,7 @@ gameObj.GameOverScreen.prototype = {
     this.text3.setTextBounds(-300, 350, 1200, 800);
 
     var style2 = { font: "20px Arial", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle", stroke: "black", strokeThickness: 1  };
-    this.text2 = game.add.text(0, 0, "The coral reef survived for " + customgametime2 + "minute(s) : " + customgametime + " second(s)!", style2);
+    this.text2 = game.add.text(0, 0, "The coral reef survived for " + customgametime2 + " minute(s) : " + customgametime + " second(s)!", style2);
     this.text2.setTextBounds(-300, 380, 1200, 800);
     }
 
