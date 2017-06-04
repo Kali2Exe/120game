@@ -10,7 +10,7 @@ gameObj.Boot.prototype = {
     init: function () {
         console.log('Boot: init');
         //when you click out of browser, the game will pause
-        this.stage.disableVisibilityChange = true; //orig value = false;
+        this.stage.disableVisibilityChange = false; //orig value = false;
     },
     preload: function () {
 
