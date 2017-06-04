@@ -10,7 +10,7 @@ gameObj.Boot.prototype = {
     init: function () {
         console.log('Boot: init');
         //when you click out of browser, the game will pause
-        this.stage.disableVisibilityChange = true; //orig value = false;
+        this.stage.disableVisibilityChange = false; //orig value = false;
     },
     preload: function () {
 
@@ -39,6 +39,7 @@ gameObj.Boot.prototype = {
         this.load.atlasJSONHash('bubbles', 'bubblesV2.png', 'bubbles.json');        
         this.load.atlasJSONHash('bar', 'resourcebar.png', 'resourcebar.json');
         this.load.atlasJSONHash('warning', 'warning.png', 'warning.json');
+        this.load.atlasJSONHash('misc', 'misc.png', 'misc.json');
         this.load.image('creditstext', 'credits_text.png');
         this.load.image('credits', 'CREDITS.png');
         //this.load.atlasJSONHash('stab', 'stab.png', 'stab.json');
@@ -441,6 +442,12 @@ gameObj.Play.prototype = {
 
         });
 
+        //misc Group
+        this.miscGroup = game.add.group();
+        this.miscGroup.enableBody = true;
+
+        this.miscTick = 60000;
+
         //paint fillers that refill paint
         this.paintFillGroup = game.add.group();
         this.paintFillGroup.enableBody = true;
@@ -608,6 +615,18 @@ gameObj.Play.prototype = {
 
 		}
 
+
+		//misc bg fish/turtle/whale spawner
+		if (this.miscTick < game.time.now) {
+            this.miscFish = new Misc(game, 'misc', 'school1');
+
+            this.miscGroup.add(this.miscFish);
+
+            this.miscTick = game.time.now + 60000;
+
+
+		}
+
         this.effectGlow.visible = false;
         this.effectHeal.visible = false;
         this.effectSparkle.visible = false;
@@ -641,10 +660,11 @@ gameObj.Play.prototype = {
         if (customgametime == 8 && customgametime2 < 1 && firstPlay == true){
         	this.toggleAtext = this.add.text(this.game.world.centerX,this.game.world.centerY,
         		'Remember!\n You can toggle coral health by pressing "A"!', 
-    			{font: '25px arial', fill: '#000000', align: 'center', stroke: 'white', strokeThickness: 2});
+    			{font: '40px arial', fill: '#000000', align: 'center', stroke: 'white', strokeThickness: 2});
   			this.toggleAtext.anchor.setTo(0.5, 0.5);        	
         	this.time.events.add(5000, this.toggleAtext.destroy, this.toggleAtext, this.destroy, this.game.add.tween(this.toggleAtext).to( { alpha: 0 }, 2000, "Linear", true));
         }
+
 
     },
 
@@ -749,9 +769,8 @@ gameObj.Play.prototype = {
             enemy.eraser.destroy();
             enemy.destroy();
 
-
         }
-        
+
     },
 
     //if collide with wall, enemy turns left or right
@@ -771,6 +790,7 @@ gameObj.Play.prototype = {
         game.debug.text('Internal game time: ' + game.time.now, 20, 40, 'yellow');
         game.debug.text('Game time (seconds): ' + customgametime, 20, 60, 'yellow');
         game.debug.text('Game time (minutes): ' + customgametime2, 20, 80, 'yellow');
+        game.debug.text('random: ' + random, 20, 100, 'yellow');
 
         //if shift held, you can see hitcircle for bird
 
@@ -908,3 +928,4 @@ game.state.start('Boot');
 var toggleDebug = false;
 var countOfDied = 0;
 var firstPlay = true;
+var random = Phaser.ArrayUtils.getRandomItem(['schoolf', 'turtlef', 'whalef'], 1)

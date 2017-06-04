@@ -5,7 +5,7 @@
 function Enemy (game, key, frame, key2, frame2) {
     //new Sprite(game, x, y, key, frame)
     //random x y location and uses Enemy image
-
+    
     //set random spawn position and facing
     this.leftFace = null;
     this.pX = Math.random() * 1200;
