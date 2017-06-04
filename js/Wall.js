@@ -3,6 +3,7 @@
  */
 function Wall (game, x, y) {
 
+    //create invisible walls
     Phaser.Sprite.call(this, game, x, y);
     game.add.existing(this);
 

@@ -7,22 +7,20 @@ function Coral (game, key, frame, x, y) {
     //random x y location and uses Coral image
     Phaser.Sprite.call(this, game, x, y, key, frame);
 
-    //set anchor/origin to middle
-    //this.anchor.set(0.5);
 
-    //the scale is random
+    //the scale
     this.scale.x = 1;
     this.scale.y = 1;
 
     this.x = x;
     this.y = y;
 
-    //enable physics and set to random velocity
+    //enable physics
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
 
 
-    //more information about coral
+    //more information about coral: health, stat, and statText
     this.health = 100;
     this.status = 'healthy';
     this.statColor = 'LimeGreen';
@@ -47,14 +45,14 @@ Coral.prototype.update = function() {
     //this.alpha = this.health/100; //old
     this.alpha = (100 * Math.pow(0.97, 100-this.health))/100;
 
-    //this.healing = false;
+    //ensures that health is within bounds
     if (100 < this.health) {
         this.health = 100;
     } else if (this.health < 0) {
         this.health = 0;
     }
 
-    //health status's
+    //health status's range
     if (50 < this.health && this.health <= 100) {
         this.status = 'healthy';
         this.statColor = 'Green';
@@ -73,14 +71,13 @@ Coral.prototype.update = function() {
         //maybe play sound
     }
 
+    //updates health and status Text
     this.statusText.text = this.status;
     this.statusText.addColor(this.statColor, 0);
 
     this.healthText.text = this.health.toFixed(0);
     this.healthText.addColor(this.statColor, 0);
-    //game.physics.arcade.overlap(player, this.bulletG4, this.lose, null, this);
-    //wraps around world
-    //game.world.wrap(this, 0, true);
+
 
 
 };

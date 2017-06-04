@@ -3,6 +3,7 @@
  */
 
 function PaintFiller (game, key, frame, x, y) {
+    //create paintFiller sprite
     //new Sprite(game, x, y, key, frame)
     //random x y location and uses PaintFiller image
     Phaser.Sprite.call(this, game, x, y, key, frame);
@@ -18,10 +19,11 @@ function PaintFiller (game, key, frame, x, y) {
     this.animations.add('bounce', Phaser.Animation.generateFrameNames('jelly', 1, 3, '', 1), 4, true);
     this.animations.play('bounce');
 
-    //enable physics and set to random velocity
+    //enable physics
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
 
+    //new radius as collision circle
     this.radius = this.width/1.50;
     this.body.setCircle(
         this.radius,
@@ -36,10 +38,6 @@ PaintFiller.prototype = Object.create(Phaser.Sprite.prototype);
 PaintFiller.prototype.constructor = PaintFiller;
 
 PaintFiller.prototype.update = function() {
-
-
-    //wraps around world
-    //game.world.wrap(this, 0, true);
 
 
 };

@@ -3,6 +3,7 @@
  */
 function Eraser (game, key, frame, x, y) {
 
+    //creates eraser
     this.base = frame;
     Phaser.Sprite.call(this, game, x, y, key, frame);
     game.add.existing(this);
