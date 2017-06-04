@@ -786,11 +786,11 @@ gameObj.Play.prototype = {
 
     render: function () {
         //game.debug.text(`Debugging Phaser ${Phaser.VERSION}`, 20, 20, 'yellow');
-        game.debug.text('FPS: ' + game.time.fps, 20, 20, 'yellow');
+        /*game.debug.text('FPS: ' + game.time.fps, 20, 20, 'yellow');
         game.debug.text('Internal game time: ' + game.time.now, 20, 40, 'yellow');
         game.debug.text('Game time (seconds): ' + customgametime, 20, 60, 'yellow');
         game.debug.text('Game time (minutes): ' + customgametime2, 20, 80, 'yellow');
-        game.debug.text('random: ' + random, 20, 100, 'yellow');
+        game.debug.text('random: ' + random, 20, 100, 'yellow');*/
 
         //if shift held, you can see hitcircle for bird
 
