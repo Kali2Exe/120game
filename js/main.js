@@ -39,6 +39,7 @@ gameObj.Boot.prototype = {
         this.load.atlasJSONHash('bubbles', 'bubblesV2.png', 'bubbles.json');        
         this.load.atlasJSONHash('bar', 'resourcebar.png', 'resourcebar.json');
         this.load.atlasJSONHash('warning', 'warning.png', 'warning.json');
+        this.load.atlasJSONHash('misc', 'misc.png', 'misc.json');
         this.load.image('creditstext', 'credits_text.png');
         this.load.image('credits', 'CREDITS.png');
         //this.load.atlasJSONHash('stab', 'stab.png', 'stab.json');
@@ -315,6 +316,9 @@ gameObj.Tutorial.prototype = {
     }
 };
 
+var customgametime = 0;
+var customgametime2 = 0;
+
 //Play Screen
 gameObj.Play = function () {
 
@@ -328,6 +332,18 @@ gameObj.Play.prototype = {
 
     //in create of Play
     create: function () {
+
+    	//SECONDS COUNTER
+        this.gametime = game.time.create(false);
+        this.gametime.start();
+    	this.gametime.loop(1000, this.updateCounter, this);
+    	customgametime = 0;
+
+    	//Minutes COUNTER
+        this.gametime2 = game.time.create(false);
+        this.gametime2.start();
+    	this.gametime2.loop(60000, this.updateCounter2, this);
+    	customgametime2 = 0;    
 
         //added quick black fade-in
         this.camera.flash('#000000');
@@ -425,6 +441,12 @@ gameObj.Play.prototype = {
             });
 
         });
+
+        //misc Group
+        this.miscGroup = game.add.group();
+        this.miscGroup.enableBody = true;
+
+        this.miscTick = 60000;
 
         //paint fillers that refill paint
         this.paintFillGroup = game.add.group();
@@ -546,7 +568,24 @@ gameObj.Play.prototype = {
         this.deathCheck.start();
         this.globalWarning.start();
 
+
     },
+
+	updateCounter: function() { //custom game timer
+
+    	if (customgametime >= 60) { //go back to 0 once it hits 60
+    		customgametime = 0;
+    	} else {
+    		customgametime++;
+    	}
+
+	},
+
+	updateCounter2: function() { //custom game timer
+
+    customgametime2++;
+
+	},
 
     update: function () {
 
@@ -563,12 +602,28 @@ gameObj.Play.prototype = {
 
 		}
 
+
 		//enemy spawner
 		if (this.eneTick < game.time.now) {
             this.enemyFish = new Enemy(game, 'enemy', 'enemyR1', 'enemy', 'eraserR1');
+            this.enemyFish.tint = Math.random() * 0xffffff; //sprite tint every spawn
+
             this.enemyGroup.add(this.enemyFish);
 
             this.eneTick = game.time.now + 16000 + this.extra2;
+
+
+		}
+
+
+		//misc bg fish/turtle/whale spawner
+		if (this.miscTick < game.time.now) {
+            this.miscFish = new Misc(game, 'misc', 'school1');
+
+            this.miscGroup.add(this.miscFish);
+
+            this.miscTick = game.time.now + 60000;
+
 
 		}
 
@@ -600,6 +655,17 @@ gameObj.Play.prototype = {
         }
         this.tick = this.tick + 1;
         this.eneTick = this.eneTick + 1;
+
+        //ONLY ONCE. create text reminder @ ~8 seconds that you can toggle coral health
+        if (customgametime == 8 && customgametime2 < 1 && firstPlay == true){
+        	this.toggleAtext = this.add.text(this.game.world.centerX,this.game.world.centerY,
+        		'Remember!\n You can toggle coral health by pressing "A"!', 
+    			{font: '40px arial', fill: '#000000', align: 'center', stroke: 'white', strokeThickness: 2});
+  			this.toggleAtext.anchor.setTo(0.5, 0.5);        	
+        	this.time.events.add(5000, this.toggleAtext.destroy, this.toggleAtext, this.destroy, this.game.add.tween(this.toggleAtext).to( { alpha: 0 }, 2000, "Linear", true));
+        }
+
+
     },
 
     //if player overlap coral, highlight it
@@ -703,9 +769,8 @@ gameObj.Play.prototype = {
             enemy.eraser.destroy();
             enemy.destroy();
 
-
         }
-        
+
     },
 
     //if collide with wall, enemy turns left or right
@@ -721,7 +786,11 @@ gameObj.Play.prototype = {
 
     render: function () {
         //game.debug.text(`Debugging Phaser ${Phaser.VERSION}`, 20, 20, 'yellow');
-        //game.debug.text('FPS: ' + game.time.fps, 20, 20, 'yellow');
+        /*game.debug.text('FPS: ' + game.time.fps, 20, 20, 'yellow');
+        game.debug.text('Internal game time: ' + game.time.now, 20, 40, 'yellow');
+        game.debug.text('Game time (seconds): ' + customgametime, 20, 60, 'yellow');
+        game.debug.text('Game time (minutes): ' + customgametime2, 20, 80, 'yellow');
+        game.debug.text('random: ' + random, 20, 100, 'yellow');*/
 
         //if shift held, you can see hitcircle for bird
 
@@ -773,11 +842,22 @@ gameObj.GameOverScreen.prototype = {
 
         this.background = game.add.tileSprite(0, 0, 1200, 800, 'gameoverbg');
 
-        this.game.time.events.add(Phaser.Timer.SECOND * 5, this.changePicture, this); //change bg to credits after 10 seconds
+        if (customgametime < 10) {
+    	var style = { font: "20px Arial", fill: "#000000", boundsAlignH: "center", boundsAlignV: "middle" };
+        this.text = game.add.text(0, 0, "However, it did survive for " + customgametime2 + " minute(s) : 0" + customgametime + " second(s)!", style);
+        this.text.setTextBounds(-20, 380, 1200, 800);
+    	} else {
+    	var style = { font: "20px Arial", fill: "#000000", boundsAlignH: "center", boundsAlignV: "middle" };
+        this.text = game.add.text(0, 0, "However, it did survive for " + customgametime2 + " minute(s) : " + customgametime + " second(s)!", style);
+        this.text.setTextBounds(-20, 380, 1200, 800);    		
+    	}
+
+        this.game.time.events.add(Phaser.Timer.SECOND * 10, this.changePicture, this); //change bg to credits after 10 seconds
 
         //Press keys to go back to title or replay
         this.shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
         this.enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+
 
         //game over sound
         //this.deathM = this.add.audio('gameOverSound');
@@ -789,6 +869,25 @@ gameObj.GameOverScreen.prototype = {
     //black fade thingy
     this.camera.flash('#000000');
     this.background = game.add.tileSprite(0, 0, 1200, 800, 'credits');
+
+    if (customgametime < 10) {
+    var style3 = { font: "bold 20px Arial", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle", stroke: "black", strokeThickness: 1 };
+    this.text3 = game.add.text(0, 0, "& YOU for helping!", style3);
+    this.text3.setTextBounds(-300, 350, 1200, 800);
+
+    var style2 = { font: "20px Arial", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle", stroke: "black", strokeThickness: 1  };
+    this.text2 = game.add.text(0, 0, "The coral reef survived for " + customgametime2 + " minute(s) : 0" + customgametime + " second(s)!", style2);
+    this.text2.setTextBounds(-300, 380, 1200, 800);
+    } else {
+
+    var style3 = { font: "bold 20px Arial", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle", stroke: "black", strokeThickness: 1 };
+    this.text3 = game.add.text(0, 0, "& YOU for helping!", style3);
+    this.text3.setTextBounds(-300, 350, 1200, 800);
+
+    var style2 = { font: "20px Arial", fill: "#ffffff", boundsAlignH: "center", boundsAlignV: "middle", stroke: "black", strokeThickness: 1  };
+    this.text2 = game.add.text(0, 0, "The coral reef survived for " + customgametime2 + " minute(s) : " + customgametime + " second(s)!", style2);
+    this.text2.setTextBounds(-300, 380, 1200, 800);
+    }
 
     },
 
@@ -829,3 +928,4 @@ game.state.start('Boot');
 var toggleDebug = false;
 var countOfDied = 0;
 var firstPlay = true;
+var random = Phaser.ArrayUtils.getRandomItem(['schoolf', 'turtlef', 'whalef'], 1)
